@@ -24,9 +24,12 @@ function VerifyEmailPage() {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/user/verify-email?token=${token}`
+        // Solicitud POST con el token en el cuerpo
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/user/verify-email`,
+          { token } // Token en el cuerpo
         );
+
         if (response.status === 200) {
           setMessage(
             "Correo verificado correctamente. Serás redirigido a la página de inicio de sesión."
