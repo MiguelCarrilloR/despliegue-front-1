@@ -24,10 +24,12 @@ function VerifyEmailPage() {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        // Solicitud POST con el token en el cuerpo
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/user/verify-email`,
-          { token } // Token en el cuerpo
+        if (!token) {
+          throw new Error("Token no proporcionado.");
+        }
+
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/verify-email?token=${token}`
         );
 
         if (response.status === 200) {
@@ -37,22 +39,24 @@ function VerifyEmailPage() {
           setTimeout(() => {
             navigate("/login");
           }, 3000);
+        } else {
+          throw new Error("Error al verificar el correo.");
         }
       } catch (error) {
-        setMessage(
-          "Error al verificar el correo. El enlace podría haber expirado o el token es inválido."
-        );
+        // Mensajes personalizados dependiendo del caso
+        if (error.message === "Token no proporcionado.") {
+          setMessage("No se proporcionó un token válido en el enlace.");
+        } else {
+          setMessage(
+            "Error al verificar el correo. El enlace podría haber expirado o el token es inválido."
+          );
+        }
       } finally {
-        setLoading(false);
+        setLoading(false); // Asegura que se deshabilite el estado de carga
       }
     };
 
-    if (token) {
-      verifyEmail();
-    } else {
-      setMessage("Token no válido.");
-      setLoading(false);
-    }
+    verifyEmail();
   }, [token, navigate]);
 
   return (
