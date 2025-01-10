@@ -35,15 +35,18 @@ const ScoutFilters = () => {
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
-      const userRole = JSON.parse(user).role;
-      if (userRole !== "scout") {
+      const parsedUser = JSON.parse(user);
+      const userRole = parsedUser.role;
+      const userStatus = parsedUser.state;
+  
+      if (userRole !== "scout" || userStatus === "pending") {
         navigate("/unauthorized");
       }
     } else {
       navigate("/unauthorized");
     }
     fetchPlayers();
-  }, [fetchPlayers, navigate]);
+  }, [fetchPlayers, navigate]);  
 
   const handleAgeChange = (event) => {
     setMaxAge(event.target.value);

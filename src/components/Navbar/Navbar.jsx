@@ -1,17 +1,7 @@
 import React, { useState } from "react";
-import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
-/**
- * Componente Navbar que representa la barra de navegación del sitio.
- * Incluye enlaces a diferentes secciones de la aplicación y un menú móvil.
- *
- * @component
- * @example
- * return (
- *   <Navbar />
- * )
- */
 const Navbar = () => {
   const [nav, setNav] = useState(false);
 
@@ -20,58 +10,122 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-transparent fixed w-full top-0 left-0 z-20">
-      <div className="flex justify-center md:justify-between items-center h-24 max-w-[1740px] mx-auto px-4 text-black">
-        <Link to="/">
+    <div className="bg-white shadow-lg fixed w-full top-0 left-0 z-50">
+      {/* Contenedor principal */}
+      <div className="flex justify-between items-center h-16 px-4 md:px-8">
+        {/* Botón para abrir el menú lateral */}
+        <div onClick={handleNav} className="text-2xl cursor-pointer md:hidden">
+          <AiOutlineMenu />
+        </div>
+
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-bold text-gray-800">
           <img
             src="https://i.imgur.com/ShYtGlJ.png"
             alt="Logo Promesas a la Cancha"
-            className="h-16 hover:scale-105 duration-300"
+            className="h-12"
           />
         </Link>
-        <ul className="hidden md:flex">
-          <Link to="/about-players">
-            <li className="p-4 hover:scale-105 duration-300">Jugadoras</li>
-          </Link>
-          <Link to="/about-scouts">
-            <li className="p-4 hover:scale-105 duration-300">Reclutadores</li>
-          </Link>
-          <Link to="/about">
-            <li className="p-4 hover:scale-105 duration-300">Nosotros</li>
-          </Link>
-          <Link to="/login">
-            <li className="p-4 hover:scale-105 duration-300">Ingresa</li>
-          </Link>
-        </ul>
-        <div onClick={handleNav} className="block md:hidden">
-          {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
-        </div>
-        <ul
-          className={
-            nav
-              ? "fixed left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-white ease-in-out duration-500"
-              : "ease-in-out duration-500 fixed left-[-100%]"
-          }
-        >
-          <Link to="/">
-            <h1 className="w-full text-3xl font-bold text-black m-4">
-              Promesas a la Cancha
-            </h1>
-          </Link>
-          <Link to="/about-players">
-            <li className="p-4 border-b border-gray-600">Jugadoras</li>
-          </Link>
-          <Link to="/about-scouts">
-            <li className="p-4 border-b border-gray-600">Reclutadores</li>
-          </Link>
-          <Link to="/about">
-            <li className="p-4 border-b border-gray-600">Nosotros</li>
-          </Link>
-          <Link to="/login">
-            <li className="p-4 border-b border-gray-600">Ingresa</li>
-          </Link>
+
+        {/* Opciones del navbar en escritorio */}
+        <ul className="hidden md:flex space-x-8">
+          <li>
+            <Link
+              to="/about-players"
+              className="text-gray-800 hover:text-blue-600 transition"
+            >
+              Jugadoras
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/about-scouts"
+              className="text-gray-800 hover:text-blue-600 transition"
+            >
+              Reclutadores
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/about"
+              className="text-gray-800 hover:text-blue-600 transition"
+            >
+              Nosotros
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/login"
+              className="text-gray-800 hover:text-blue-600 transition"
+            >
+              Ingresa
+            </Link>
+          </li>
         </ul>
       </div>
+
+      {/* Menú lateral para dispositivos móviles */}
+      <div
+        className={`fixed top-0 left-0 w-[75%] h-full bg-white text-white transform ${
+          nav ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 z-40`}
+      >
+        <div className="flex items-center justify-between p-4">
+          <h1 className="text-2xl font-bold text-black">Promesas a la Cancha</h1>
+          <div
+            onClick={handleNav}
+            className="text-black text-2xl cursor-pointer"
+          >
+            <AiOutlineClose />
+          </div>
+        </div>
+        <ul className="mt-8 space-y-4">
+          <li className="p-4">
+            <Link
+              to="/about-players"
+              className="block text-black rounded-md p-2"
+              onClick={handleNav}
+            >
+              Jugadoras
+            </Link>
+          </li>
+          <li className="p-4">
+            <Link
+              to="/about-scouts"
+              className="block text-black rounded-md p-2"
+              onClick={handleNav}
+            >
+              Reclutadores
+            </Link>
+          </li>
+          <li className="p-4">
+            <Link
+              to="/about"
+              className="block text-black rounded-md p-2"
+              onClick={handleNav}
+            >
+              Nosotros
+            </Link>
+          </li>
+          <li className="p-4">
+            <Link
+              to="/login"
+              className="block text-black rounded-md p-2"
+              onClick={handleNav}
+            >
+              Ingresa
+            </Link>
+          </li>
+        </ul>
+      </div>
+
+      {/* Fondo oscuro detrás del menú cuando está abierto */}
+      {nav && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={handleNav}
+        />
+      )}
     </div>
   );
 };

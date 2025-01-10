@@ -557,11 +557,6 @@ function PlayerProfile() {
             )}
           </div>
         </div>
-        <IoChatbubbleEllipses
-          className="absolute bottom-0 right-0 text-6xl text-lime-500 mb-4 mr-4 hover:scale-105 duration-300"
-          title="Chat"
-          onClick={() => handleChat()}
-        />
       </div>
       <div className="shadow-lg p-6 border rounded-lg max-w-[1240px] mx-auto mb-8 my-20 hover:scale-105 duration-300">
         <h1 className="md:text-6xl sm:text-5xl text-4xl font-bold py-2 text-center">
@@ -734,6 +729,11 @@ function PlayerProfile() {
           </Button>
         </DialogActions>
       </Dialog>
+      <IoChatbubbleEllipses
+        className="fixed bottom-4 right-4 text-6xl text-lime-500 hover:scale-105 duration-300 cursor-pointer"
+        title="Chat"
+        onClick={handleChat}
+      />
     </div>
   );
 }

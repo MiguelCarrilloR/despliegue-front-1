@@ -20,41 +20,64 @@ const NavbarLogin = () => {
   };
 
   return (
-    <div className="bg-white w-full fixed top-0 left-0 z-20">
-      <div className="flex justify-center md:justify-between items-center h-24 max-w-[1740px] mx-auto px-4 text-black">
+    <div className="bg-white w-full fixed top-0 left-0 z-20 shadow-md">
+      <div className="flex justify-center md:justify-between items-center h-16 max-w-[1740px] mx-auto px-4 text-black">
+        {/* Logo */}
         <Link to="/">
           <img
             src="https://i.imgur.com/ShYtGlJ.png"
             alt="Logo Promesas a la Cancha"
-            className="h-16 hover:scale-105 duration-300"
+            className="h-12 hover:scale-105 duration-300"
           />
         </Link>
-        <ul className="hidden md:flex">
+
+        {/* Navbar para pantallas grandes */}
+        <ul className="hidden md:flex space-x-6">
           <NavLink to="/about-players" label="Jugadoras" />
           <NavLink to="/about-scouts" label="Reclutadores" />
           <NavLink to="/about" label="Nosotros" />
           <NavLink to="/login" label="Ingresa" />
         </ul>
+
+        {/* Botón del menú móvil */}
         <div
           onClick={handleNavToggle}
-          className="block md:hidden cursor-pointer"
+          className="block md:hidden cursor-pointer text-2xl"
         >
-          {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
+          {nav ? <AiOutlineClose /> : <AiOutlineMenu />}
         </div>
-        <ul
-          className={`fixed left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-[#000300] transition-transform duration-500 ${
-            nav ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <h1 className="w-full text-3xl font-bold text-[#fff] m-4">
-            Promesas a la Cancha
-          </h1>
-          <NavLink to="/about-players" label="Jugadoras" />
-          <NavLink to="/about-scouts" label="Reclutadores" />
-          <NavLink to="/about" label="Nosotros" />
-          <NavLink to="/login" label="Ingresa" />
+      </div>
+
+      {/* Menú lateral para dispositivos móviles */}
+      <div
+        className={`fixed top-0 left-0 w-[70%] h-full bg-white shadow-lg transform ${
+          nav ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 z-50`}
+      >
+        <div className="flex justify-between items-center p-4 border-b border-gray-200">
+          <h1 className="text-xl font-bold text-black">Promesas a la Cancha</h1>
+          <div
+            onClick={handleNavToggle}
+            className="text-black text-2xl cursor-pointer"
+          >
+            <AiOutlineClose />
+          </div>
+        </div>
+        <ul className="mt-4 space-y-4">
+          <NavLink to="/about-players" label="Jugadoras" onClick={handleNavToggle} />
+          <NavLink to="/about-scouts" label="Reclutadores" onClick={handleNavToggle} />
+          <NavLink to="/about" label="Nosotros" onClick={handleNavToggle} />
+          <NavLink to="/login" label="Ingresa" onClick={handleNavToggle} />
         </ul>
       </div>
+
+      {/* Fondo oscuro detrás del menú cuando está abierto */}
+      {nav && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={handleNavToggle}
+        />
+      )}
     </div>
   );
 };
@@ -64,11 +87,14 @@ const NavbarLogin = () => {
  *
  * @param {string} to - La ruta a la que enlaza el componente.
  * @param {string} label - El texto que se muestra en el enlace.
+ * @param {Function} onClick - Función opcional que se ejecuta al hacer clic en el enlace.
  * @returns {JSX.Element}
  */
-const NavLink = ({ to, label }) => (
-  <Link to={to}>
-    <li className="p-4 hover:scale-105 duration-300">{label}</li>
+const NavLink = ({ to, label, onClick }) => (
+  <Link to={to} onClick={onClick}>
+    <li className="p-4 text-black hover:bg-gray-100 rounded-lg transition">
+      {label}
+    </li>
   </Link>
 );
 

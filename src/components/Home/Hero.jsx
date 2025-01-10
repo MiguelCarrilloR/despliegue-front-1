@@ -15,15 +15,7 @@ import TypingEffect from "react-typing-effect"; // Importar el componente
 const Hero = () => {
   return (
     <div className="relative text-white h-screen">
-      <video
-        autoPlay
-        loop
-        muted
-        className="absolute w-full h-full object-cover"
-      >
-        <source src="https://i.imgur.com/1NmTs86.mp4" type="video/mp4" />
-        Tu navegador no soporta el elemento de video.
-      </video>
+      <img src="https://i.imgur.com/kAAoWpn.png" className="absolute w-full h-full object-cover"/>
       <div className="relative z-10 max-w-[1500px] mt-[-96px] w-full h-screen mx-auto text-center flex flex-col justify-center">
         <h1 className="md:text-7xl sm:text-6xl text-4xl font-bold md:py-6">
           Promesas a la Cancha

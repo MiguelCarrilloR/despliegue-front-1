@@ -175,246 +175,247 @@ const PlayerForm = () => {
   };
 
   return (
-    <div className="w-full py-16 text-white px-4">
-      <div className="max-w-[1240px] mx-auto grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 my-4">
-          <div className="flex justify-center items-center">
+    <div
+  className="w-full h-screen bg-cover bg-center relative"
+  style={{
+    backgroundImage: "url('https://i.imgur.com/jybLDsr.jpg')",
+    paddingBottom: '800px',
+    paddingTop: '900px',
+  }}
+>
+  <div className="flex justify-center items-center w-full h-full">
+    <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-3xl">
+      <h1 className="md:text-4xl sm:text-3xl text-2xl font-bold py-2 text-black">
+        Completa tu perfil
+      </h1>
+      <form action="" className="form grid" onSubmit={sentData}>
+        <div className="sm:flex-row items-center justify-between w-full my-8">
+          <label className="text-black">Peso</label>
+          <input
+            className="p-3 flex w-full rounded-md text-black border border-lime-500"
+            type="number"
+            placeholder="Kg"
+            id="weight"
+            required
+            onChange={(e) => {
+              setWeight(e.target.value);
+            }}
+          />
+          <label className="text-black my-8">Altura</label>
+          <input
+            className="p-3 flex w-full rounded-md text-black border border-lime-500"
+            type="number"
+            placeholder="Cm"
+            id="height"
+            required
+            onChange={(e) => {
+              setHeight(e.target.value);
+            }}
+          />
+          <label className="text-black my-8">Posición General</label>
+          <select
+            id="genposition"
+            className="p-3 flex w-full rounded-md text-black border border-lime-500"
+            required
+            onChange={(e) => {
+              setGenPosition(e.target.value);
+            }}
+          >
+            <option value="">Selecciona tu posición</option>
+            <option value="goalkeeper">Portera</option>
+            <option value="defender">Defensora</option>
+            <option value="midfielder">Mediocampista</option>
+            <option value="attacker">Atacante</option>
+          </select>
+          <label className="text-black my-8">Posición Específica</label>
+          <div className="p-3 flex flex-col w-full rounded-md text-black">
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="PO"
+                checked={selectedPositions.includes("PO")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Portera
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="LI"
+                checked={selectedPositions.includes("LI")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Lateral Izquierda
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="LD"
+                checked={selectedPositions.includes("LD")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Lateral Derecha
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="DFC"
+                checked={selectedPositions.includes("DFC")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Defensora Central
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="MI"
+                checked={selectedPositions.includes("MI")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Mediocampista Izquierda
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="MD"
+                checked={selectedPositions.includes("MD")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Mediocampista Derecha
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="MC"
+                checked={selectedPositions.includes("MC")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Mediocampista Central
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="SD"
+                checked={selectedPositions.includes("SD")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Delantera
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                value="DC"
+                checked={selectedPositions.includes("DC")}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              Delantera Centro
+            </label>
+          </div>
+          <label className="text-black my-8">Años de experiencia</label>
+          <input
+            className="p-3 flex w-full rounded-md text-black border border-lime-500"
+            type="number"
+            placeholder="Años"
+            id="yearsexp"
+            required
+            onChange={(e) => {
+              setYearsExp(e.target.value);
+            }}
+          />
+          <label className="text-black my-8">Descripción</label>
+          <textarea
+            className="p-3 flex w-full h-40 rounded-md text-black border border-lime-500"
+            placeholder="Escribe una breve descripción"
+            id="description"
+            required
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+          <label className="text-black my-8">Pie de apoyo</label>
+          <select
+            id="foot"
+            className="p-3 flex w-full rounded-md text-black border border-lime-500"
+            required
+            onChange={(e) => {
+              setFoot(e.target.value);
+            }}
+          >
+            <option value="">Selecciona tu pie de apoyo</option>
+            <option value="right">Derecho</option>
+            <option value="left">Izquierdo</option>
+            <option value="both">Ambos</option>
+          </select>
+          <label className="text-black my-8">Edad</label>
+          <input
+            className="p-3 flex w-full rounded-md text-black border border-lime-500"
+            type="number"
+            placeholder="Años"
+            id="age"
+            required
+            onChange={(e) => {
+              setAge(e.target.value);
+            }}
+          />
+          <label className="text-black my-8">Teléfono</label>
+          <input
+            className="p-3 flex w-full rounded-md text-black border border-lime-500"
+            type="tel"
+            placeholder="Teléfono"
+            id="phone"
+            required
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }}
+          />
+        </div>
+        <label className="text-black my-8">Foto de perfil</label>
+        <div
+          {...getRootProps({ className: "dropzone" })}
+          className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-lime-500 rounded-md"
+        >
+          <input
+            {...getInputProps({
+              accept: "image/jpeg, image/png", // Solo aceptar archivos JPEG y PNG
+            })}
+          />
+          <p className="text-black">
+            Arrastra y suelta una imagen aquí, o haz clic para seleccionar
+            una imagen (solo JPEG o PNG).
+          </p>
+        </div>
+
+        {imageUrl && (
+          <div className="mt-4">
             <img
-              className="w-full h-auto rounded-lg"
-              src={"https://i.imgur.com/XKDOHE4.jpg"}
-              alt="/"
+              src={imageUrl}
+              alt="Vista previa"
+              className="w-32 h-32 object-cover rounded"
             />
           </div>
-        </div>
-        <div className="my-4">
-          <h1 className="md:text-4xl sm:text-3xl text-2xl font-bold py-2 text-black">
-            Completa tu perfil
-          </h1>
-          <form action="" className="form grid" onSubmit={sentData}>
-            <div className="sm:flex-row items-center justify-between w-full my-8">
-              <label className="text-black">Peso</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="number"
-                placeholder="Kg"
-                id="weight"
-                required
-                onChange={(e) => {
-                  setWeight(e.target.value);
-                }}
-              />
-              <label className="text-black my-8">Altura</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="number"
-                placeholder="Cm"
-                id="height"
-                required
-                onChange={(e) => {
-                  setHeight(e.target.value);
-                }}
-              />
-              <label className="text-black my-8">Posición General</label>
-              <select
-                id="genposition"
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                required
-                onChange={(e) => {
-                  setGenPosition(e.target.value);
-                }}
-              >
-                <option value="">Selecciona tu posición</option>
-                <option value="goalkeeper">Portera</option>
-                <option value="defender">Defensora</option>
-                <option value="midfielder">Mediocampista</option>
-                <option value="attacker">Atacante</option>
-              </select>
-              <label className="text-black my-8">Posición Específica</label>
-              <div className="p-3 flex flex-col w-full rounded-md text-black">
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="PO"
-                    checked={selectedPositions.includes("PO")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Portera
-                </label>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="LI"
-                    checked={selectedPositions.includes("LI")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Lateral Izquierda
-                </label>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="LD"
-                    checked={selectedPositions.includes("LD")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Lateral Derecha
-                </label>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="DFC"
-                    checked={selectedPositions.includes("DFC")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Defensora Central
-                </label>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="MI"
-                    checked={selectedPositions.includes("MI")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Mediocampista Izquierda
-                </label>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="MD"
-                    checked={selectedPositions.includes("MD")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Mediocampista Derecha
-                </label>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="MC"
-                    checked={selectedPositions.includes("MC")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Mediocampista Central
-                </label>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="SD"
-                    checked={selectedPositions.includes("SD")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Delantera
-                </label>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    value="DC"
-                    checked={selectedPositions.includes("DC")}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
-                  />
-                  Delantera Centro
-                </label>
-              </div>
-              <label className="text-black my-8">Años de experiencia</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="number"
-                placeholder="Años"
-                id="yearsexp"
-                required
-                onChange={(e) => {
-                  setYearsExp(e.target.value);
-                }}
-              />
-              <label className="text-black my-8">Descripción</label>
-              <textarea
-                className="p-3 flex w-full h-40 rounded-md text-black border border-lime-500"
-                placeholder="Escribe una breve descripción"
-                id="description"
-                required
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-              />
-              <label className="text-black my-8">Pie de apoyo</label>
-              <select
-                id="foot"
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                required
-                onChange={(e) => {
-                  setFoot(e.target.value);
-                }}
-              >
-                <option value="">Selecciona tu pie de apoyo</option>
-                <option value="right">Derecho</option>
-                <option value="left">Izquierdo</option>
-                <option value="both">Ambos</option>
-              </select>
-              <label className="text-black my-8">Edad</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="number"
-                placeholder="Años"
-                id="age"
-                required
-                onChange={(e) => {
-                  setAge(e.target.value);
-                }}
-              />
-              <label className="text-black my-8">Teléfono</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="tel"
-                placeholder="Teléfono"
-                id="phone"
-                required
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                }}
-              />
-            </div>
-            <label className="text-black my-8">Foto de perfil</label>
-            <div
-              {...getRootProps({ className: "dropzone" })}
-              className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-lime-500 rounded-md"
-            >
-              <input
-                {...getInputProps({
-                  accept: "image/jpeg, image/png", // Solo aceptar archivos JPEG y PNG
-                })}
-              />
-              <p className="text-black">
-                Arrastra y suelta una imagen aquí, o haz clic para seleccionar
-                una imagen (solo JPEG o PNG).
-              </p>
-            </div>
-
-            {imageUrl && (
-              <div className="mt-4">
-                <img
-                  src={imageUrl}
-                  alt="Vista previa"
-                  className="w-32 h-32 object-cover rounded"
-                />
-              </div>
-            )}
-            <button
-              type="submit"
-              className="mt-8 p-3 w-full bg-lime-500 text-black font-bold rounded-md hover:bg-lime-600 transition duration-300"
-            >
-              Completar perfil
-            </button>
-          </form>
-        </div>
-      </div>
+        )}
+        <button
+          type="submit"
+          className="mt-8 p-3 w-full bg-lime-500 text-black font-bold rounded-md hover:bg-lime-600 transition duration-300"
+        >
+          Completar perfil
+        </button>
+      </form>
     </div>
+  </div>
+</div>
+
+
+
   );
 };
 

@@ -4,17 +4,6 @@ import axios from "axios";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 
-/**
- * Componente LoginForm que maneja el inicio de sesión de usuarios.
- * Permite a los usuarios ingresar su correo electrónico y contraseña
- * y redirige según su rol después de iniciar sesión.
- *
- * @component
- * @example
- * return (
- *   <LoginForm />
- * )
- */
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,11 +45,11 @@ function LoginForm() {
       .then((response) => {
         if (response.data.message) {
           Toastify({
-            text: response.data.message, // Muestra el mensaje de error desde el backend
+            text: response.data.message,
             duration: 3000,
             close: true,
-            gravity: "top", // "top" o "bottom"
-            position: "center", // "left", "center" o "right"
+            gravity: "top",
+            position: "center",
             backgroundColor: "#A52A2A",
           }).showToast();
         } else {
@@ -88,108 +77,79 @@ function LoginForm() {
         }
       })
       .catch((error) => {
-        // Manejo de errores
-        if (error.response) {
-          // La solicitud se hizo y el servidor respondió con un código de estado que no está en el rango de 2xx
-          Toastify({
-            text:
-              "Error: " + error.response.data.message ||
-              "Error en la solicitud.",
-            duration: 3000,
-            close: true,
-            gravity: "top", // "top" o "bottom"
-            position: "center", // "left", "center" o "right"
-            backgroundColor: "#A52A2A",
-          }).showToast();
-        } else if (error.request) {
-          // La solicitud se hizo pero no se recibió respuesta
-          Toastify({
-            text: "Error: No se recibió respuesta del servidor.",
-            duration: 3000,
-            close: true,
-            gravity: "top", // "top" o "bottom"
-            position: "center", // "left", "center" o "right"
-            backgroundColor: "#A52A2A",
-          }).showToast();
-        } else {
-          // Algo ocurrió al configurar la solicitud
-          Toastify({
-            text: "Error: " + error.message,
-            duration: 3000,
-            close: true,
-            gravity: "top", // "top" o "bottom"
-            position: "center", // "left", "center" o "right"
-            backgroundColor: "#A52A2A",
-          }).showToast();
-        }
+        Toastify({
+          text:
+            error.response?.data?.message || "Error en la solicitud.",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "center",
+          backgroundColor: "#A52A2A",
+        }).showToast();
       });
   };
 
   return (
-    <div className="w-full py-16 text-white px-4">
-      <div className="max-w-[1240px] mx-auto grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 my-4">
-          <div className="flex justify-center items-center">
-            <img
-              className="w-full h-auto rounded-lg"
-              src={"https://i.imgur.com/DYlbbCU.jpg"}
-              alt="Banner"
-            />
-          </div>
-        </div>
-        <div className="my-4 lg:ml-8">
+    <div className="w-full h-screen relative bg-gray-900">
+      <div className="absolute inset-0">
+        <img
+          className="w-full h-full object-cover"
+          src="https://i.imgur.com/c5tHJ8t.jpg"
+          alt="Background"
+        />
+      </div>
+      <div className="absolute inset-0 flex justify-center items-center">
+        <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-96">
           <img
             src="https://i.imgur.com/anUuFBV.png"
             alt="Logo Promesas"
-            className="mb-8"
+            className="mb-8 mx-auto"
           />
-          <form action="" className="form grid" onSubmit={sentUser}>
-            <div className="sm:flex-row items-center justify-between w-full my-8">
-              <label className="text-black">Email</label>
+          <form className="grid gap-4" onSubmit={sentUser}>
+            <div>
+              <label className="block text-black mb-2">Email</label>
               <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500 mb-4"
+                className="p-3 w-full rounded-md text-black border border-lime-500"
                 type="email"
                 placeholder="Ingresa tu correo"
                 id="email"
                 required
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
+                onChange={(e) => setEmail(e.target.value)}
               />
-              <label className="text-black my-8">Contraseña</label>
+            </div>
+            <div>
+              <label className="block text-black mb-2">Contraseña</label>
               <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500 mb-4"
+                className="p-3 w-full rounded-md text-black border border-lime-500"
                 type="password"
                 placeholder="Ingresa tu contraseña"
                 id="password"
                 required
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <p className="text-black my-2">
-                ¿Has Olvidado tu Contraseña?{" "}
-                <Link
-                  to="/recover"
-                  className="text-lime-500 hover:scale-105 duration-300"
-                >
-                  Ingresa aquí
-                </Link>
-              </p>
-              <button className="bg-lime-500 text-black w-full rounded-md font-medium my-6 px-6 py-3 hover:scale-105 duration-300">
-                Entrar
-              </button>
-              <p className="text-black my-2">
-                ¿Aún no tienes cuenta?{" "}
-                <Link
-                  to="/register"
-                  className="text-lime-500 hover:scale-105 duration-300"
-                >
-                  Ingresa aquí
-                </Link>
-              </p>
             </div>
+            <button className="bg-lime-500 text-black w-full rounded-md font-medium py-3 hover:scale-105 transition duration-300">
+              Entrar
+            </button>
           </form>
+          <p className="text-black mt-4 text-center">
+            ¿Has Olvidado tu Contraseña?{" "}
+            <Link
+              to="/recover"
+              className="text-lime-500 hover:scale-105 transition duration-300"
+            >
+              Ingresa aquí
+            </Link>
+          </p>
+          <p className="text-black mt-2 text-center">
+            ¿Aún no tienes cuenta?{" "}
+            <Link
+              to="/register"
+              className="text-lime-500 hover:scale-105 transition duration-300"
+            >
+              Regístrate aquí
+            </Link>
+          </p>
         </div>
       </div>
     </div>

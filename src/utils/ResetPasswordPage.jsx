@@ -67,23 +67,10 @@ function ResetPasswordPage() {
   return (
     <>
       <NavbarLogin />
-      <div className="w-full py-16 text-white px-4">
-        <div className="max-w-[1240px] mx-auto grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 my-4">
-            <div className="flex justify-center items-center">
-              <img
-                className="w-full h-auto rounded-lg"
-                src={"https://i.imgur.com/DYlbbCU.jpg"}
-                alt="Banner"
-              />
-            </div>
-          </div>
-          <div className="my-4 lg:ml-8">
-            <img
-              src="https://i.imgur.com/anUuFBV.png"
-              alt="Logo Promesas"
-              className="mb-8"
-            />
+      <div className="w-full h-screen py-16 px-4 relative">
+        <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0" style={{ backgroundImage: "url('https://i.imgur.com/c5tHJ8t.jpg')" }}></div>
+        <div className="flex justify-center items-center w-full h-full relative z-10">
+          <div className="bg-white bg-opacity-75 p-8 rounded-lg shadow-lg w-full max-w-md">
             <form className="form grid" onSubmit={handleSubmit}>
               <div className="sm:flex-row items-center justify-between w-full my-8">
                 <label className="text-black">Nueva Contraseña</label>
@@ -115,6 +102,8 @@ function ResetPasswordPage() {
           </div>
         </div>
       </div>
+
+
       <Footer />
     </>
   );

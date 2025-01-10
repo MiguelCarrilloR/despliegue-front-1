@@ -199,125 +199,129 @@ const ScoutForm = () => {
   };
 
   return (
-    <div className="w-full py-16 text-white px-4">
-      <div className="max-w-[1240px] mx-auto grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 my-4">
-          <div className="flex justify-center items-center">
-            <img
-              className="w-full h-auto rounded-lg"
-              src={"https://i.imgur.com/QyHpPxX.png"}
-              alt="/"
+    <div
+      className="w-full py-16 text-white px-4"
+      style={{
+        backgroundImage: 'url("https://i.imgur.com/QyHpPxX.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        minHeight: '100vh', // Asegura que el contenedor ocupe toda la altura de la ventana
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center', // Centra el formulario verticalmente
+        paddingTop: "150px", // Añade un espacio en la parte superior del contenedor
+      }}
+    >
+      <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+        <h1 className="md:text-4xl sm:text-3xl text-2xl font-bold py-2 text-black text-center">
+          Completa tu perfil
+        </h1>
+        <form action="" className="form grid" onSubmit={sentData}>
+          <div className="sm:flex-row items-center justify-between w-full my-8">
+            <label className="text-black">Organización</label>
+            <input
+              className="p-3 flex w-full rounded-md text-black border border-lime-500"
+              type="text"
+              placeholder="Ingresa el nombre de la Organización"
+              id="organization"
+              required
+              onChange={(e) => {
+                setOrganization(e.target.value);
+              }}
             />
-          </div>
-        </div>
-        <div className="my-4">
-          <h1 className="md:text-4xl sm:text-3xl text-2xl font-bold py-2 text-black">
-            Completa tu perfil
-          </h1>
-          <form action="" className="form grid" onSubmit={sentData}>
-            <div className="sm:flex-row items-center justify-between w-full my-8">
-              <label className="text-black">Organización</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="text"
-                placeholder="Ingresa el nombre de la Organización"
-                id="organization"
-                required
-                onChange={(e) => {
-                  setOrganization(e.target.value);
-                }}
-              />
-              <label className="text-black my-8">Cargo</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="text"
-                placeholder="Ingresa tu cargo dentro de la Organización"
-                id="position"
-                required
-                onChange={(e) => {
-                  setPosition(e.target.value);
-                }}
-              />
+            <label className="text-black my-8">Cargo</label>
+            <input
+              className="p-3 flex w-full rounded-md text-black border border-lime-500"
+              type="text"
+              placeholder="Ingresa tu cargo dentro de la Organización"
+              id="position"
+              required
+              onChange={(e) => {
+                setPosition(e.target.value);
+              }}
+            />
 
-              <label className="text-black my-8">
-                Licencia de entrenador o afiliación a la Organización
-              </label>
-              <input
-                type="file"
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                accept=".pdf,.doc,.docx,image/*"
-                onChange={handleLicenseChange}
-              />
+            <label className="text-black my-8">
+              Licencia de entrenador o afiliación a la Organización
+            </label>
+            <input
+              type="file"
+              className="p-3 flex w-full rounded-md text-black border border-lime-500"
+              accept=".pdf,.doc,.docx,image/*"
+              onChange={handleLicenseChange}
+            />
 
-              <label className="text-black my-8">Género</label>
-              <select
-                id="gender"
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                required
-                onChange={(e) => {
-                  setGender(e.target.value);
-                }}
-              >
-                <option value="">Selecciona tu género</option>
-                <option value="man">Hombre</option>
-                <option value="woman">Mujer</option>
-                <option value="other">Otro</option>
-              </select>
+            <label className="text-black my-8">Género</label>
+            <select
+              id="gender"
+              className="p-3 flex w-full rounded-md text-black border border-lime-500"
+              required
+              onChange={(e) => {
+                setGender(e.target.value);
+              }}
+            >
+              <option value="">Selecciona tu género</option>
+              <option value="man">Hombre</option>
+              <option value="woman">Mujer</option>
+              <option value="other">Otro</option>
+            </select>
 
-              <label className="text-black my-8">Edad</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="number"
-                placeholder="Años"
-                id="age"
-                required
-                onChange={(e) => {
-                  setAge(e.target.value);
-                }}
-              />
+            <label className="text-black my-8">Edad</label>
+            <input
+              className="p-3 flex w-full rounded-md text-black border border-lime-500"
+              type="number"
+              placeholder="Años"
+              id="age"
+              required
+              onChange={(e) => {
+                setAge(e.target.value);
+              }}
+            />
 
-              <label className="text-black my-8">Teléfono</label>
-              <input
-                className="p-3 flex w-full rounded-md text-black border border-lime-500"
-                type="tel"
-                placeholder="Teléfono"
-                id="phone"
-                required
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                }}
-              />
+            <label className="text-black my-8">Teléfono</label>
+            <input
+              className="p-3 flex w-full rounded-md text-black border border-lime-500"
+              type="tel"
+              placeholder="Teléfono"
+              id="phone"
+              required
+              onChange={(e) => {
+                setPhone(e.target.value);
+              }}
+            />
 
-              <label className="text-black my-8">Imagen de Perfil</label>
-              <div
-                {...getRootProps()}
-                className="border-2 border-dashed border-lime-500 p-4 text-center"
-              >
-                <input {...getInputProps()} />
-                <p className="text-black">
-                  Arrastra y suelta una imagen aquí, o haz clic para seleccionar
-                  una.
-                </p>
-              </div>
-
-              {imageUrl && (
-                <div className="mt-4">
-                  <img
-                    src={imageUrl}
-                    alt="Vista previa"
-                    className="max-w-xs mx-auto"
-                  />
-                </div>
-              )}
-
-              <button className="bg-black text-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto py-3 px-6">
-                Completar Perfil
-              </button>
+            <label className="text-black my-8">Imagen de Perfil</label>
+            <div
+              {...getRootProps()}
+              className="border-2 border-dashed border-lime-500 p-4 text-center"
+            >
+              <input {...getInputProps()} />
+              <p className="text-black">
+                Arrastra y suelta una imagen aquí, o haz clic para seleccionar
+                una.
+              </p>
             </div>
-          </form>
-        </div>
+
+            {imageUrl && (
+              <div className="mt-4">
+                <img
+                  src={imageUrl}
+                  alt="Vista previa"
+                  className="max-w-xs mx-auto"
+                />
+              </div>
+            )}
+
+            <button className="bg-lime-500 text-[#fff] w-[200px] rounded-md font-medium my-6 mx-auto py-3 px-6 block">
+              Completar Perfil
+            </button>
+
+          </div>
+        </form>
       </div>
     </div>
+
+
   );
 };
 

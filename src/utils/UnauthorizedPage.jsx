@@ -1,6 +1,18 @@
 import React, { useEffect } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+
+const MultipleShadow = (length) => {
+  let value = '2px -1px 0 #000';
+  for (let i = 2; i <= length; i++) {
+    const ho = i * 2;
+    const vo = -(ho / 2);
+    const col = `hsl(0deg, 0%, ${i * 2}%)`;
+    value += `, ${ho}px ${vo}px 0 ${col}`;
+  }
+  return value;
+};
 
 /**
  * Componente que muestra un mensaje de error cuando el usuario no está autorizado.
@@ -18,21 +30,23 @@ function UnauthorizedPage() {
   }, []);
 
   return (
-    <div className="my-20 flex flex-col items-center">
-      <h1 className="md:text-6xl sm:text-5xl text-4xl font-bold py-2 text-center">
-        ¡No estás autorizado para acceder a esta página!
-      </h1>
-      <img
-        src={"https://i.imgur.com/xK77pXI.jpg"}
-        alt="Player"
-        className="rounded-full w-64 h-64 object-cover shadow-lg my-8"
-      />
-      <button
-        onClick={() => navigate("/")}
-        className="bg-lime-500 text-[#000] rounded-md font-medium py-3 px-6 flex items-center hover:scale-105 duration-300"
-      >
-        <IoIosArrowRoundBack className="mr-2" /> Volver
-      </button>
+    <div className="flex justify-center items-center h-screen bg-white-800">
+      <div className="text-center">
+        <div
+          className="number font-extrabold text-white text-[30vmin] leading-none tracking-[5vmin] relative"
+          style={{
+            textShadow: MultipleShadow(8),
+          }}
+        >
+          
+        </div>
+        <div className="text-6xl font-semibold text-black">
+          <span className="text-[10vmin] block">¡Estás en fuera de juego!</span>
+        </div>
+        <Link to="/" className="text-lg text-lime-500 hover:text-indigo-400 mt-4 block">
+        Volver al inicio
+        </Link>
+      </div>
     </div>
   );
 }
