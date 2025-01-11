@@ -6,6 +6,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase/FirebaseConfig";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import { Upload, User, Building, Briefcase, Phone, ImageIcon, Calendar, FileText } from 'lucide-react';
 
 /**
  * Componente de formulario para scouts.
@@ -200,123 +201,159 @@ const ScoutForm = () => {
 
   return (
     <div
-      className="w-full py-16 text-white px-4"
-      style={{
-        backgroundImage: 'url("https://i.imgur.com/QyHpPxX.png")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        minHeight: '100vh', // Asegura que el contenedor ocupe toda la altura de la ventana
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center', // Centra el formulario verticalmente
-        paddingTop: "150px", // Añade un espacio en la parte superior del contenedor
-      }}
+      className="w-full min-h-screen bg-gradient-to-br from-green-50 to-lime-100 py-16 px-4"
     >
-      <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <h1 className="md:text-4xl sm:text-3xl text-2xl font-bold py-2 text-black text-center">
-          Completa tu perfil
-        </h1>
-        <form action="" className="form grid" onSubmit={sentData}>
-          <div className="sm:flex-row items-center justify-between w-full my-8">
-            <label className="text-black">Organización</label>
-            <input
-              className="p-3 flex w-full rounded-md text-black border border-lime-500"
-              type="text"
-              placeholder="Ingresa el nombre de la Organización"
-              id="organization"
-              required
-              onChange={(e) => {
-                setOrganization(e.target.value);
-              }}
-            />
-            <label className="text-black my-8">Cargo</label>
-            <input
-              className="p-3 flex w-full rounded-md text-black border border-lime-500"
-              type="text"
-              placeholder="Ingresa tu cargo dentro de la Organización"
-              id="position"
-              required
-              onChange={(e) => {
-                setPosition(e.target.value);
-              }}
-            />
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl mx-auto p-8 my-20">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+            Completa tu Perfil
+          </h1>
+          <p className="text-gray-600">
+            Ayúdanos a conocerte mejor completando la siguiente información
+          </p>
+        </div>
 
-            <label className="text-black my-8">
-              Licencia de entrenador o afiliación a la Organización
-            </label>
-            <input
-              type="file"
-              className="p-3 flex w-full rounded-md text-black border border-lime-500"
-              accept=".pdf,.doc,.docx,image/*"
-              onChange={handleLicenseChange}
-            />
-
-            <label className="text-black my-8">Género</label>
-            <select
-              id="gender"
-              className="p-3 flex w-full rounded-md text-black border border-lime-500"
-              required
-              onChange={(e) => {
-                setGender(e.target.value);
-              }}
-            >
-              <option value="">Selecciona tu género</option>
-              <option value="man">Hombre</option>
-              <option value="woman">Mujer</option>
-              <option value="other">Otro</option>
-            </select>
-
-            <label className="text-black my-8">Edad</label>
-            <input
-              className="p-3 flex w-full rounded-md text-black border border-lime-500"
-              type="number"
-              placeholder="Años"
-              id="age"
-              required
-              onChange={(e) => {
-                setAge(e.target.value);
-              }}
-            />
-
-            <label className="text-black my-8">Teléfono</label>
-            <input
-              className="p-3 flex w-full rounded-md text-black border border-lime-500"
-              type="tel"
-              placeholder="Teléfono"
-              id="phone"
-              required
-              onChange={(e) => {
-                setPhone(e.target.value);
-              }}
-            />
-
-            <label className="text-black my-8">Imagen de Perfil</label>
-            <div
-              {...getRootProps()}
-              className="border-2 border-dashed border-lime-500 p-4 text-center"
-            >
-              <input {...getInputProps()} />
-              <p className="text-black">
-                Arrastra y suelta una imagen aquí, o haz clic para seleccionar
-                una.
-              </p>
+        <form onSubmit={sentData} className="space-y-6">
+          <div className="space-y-6">
+            {/* Organization */}
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-700 font-medium gap-2">
+                <Building className="w-5 h-5 text-lime-600" />
+                Organización
+              </label>
+              <input
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-lime-500 focus:ring-2 focus:ring-lime-200 transition-all"
+                type="text"
+                placeholder="Ingresa el nombre de la Organización"
+                id="organization"
+                required
+                onChange={(e) => {
+                  setOrganization(e.target.value);
+                }}
+              />
             </div>
 
-            {imageUrl && (
-              <div className="mt-4">
-                <img
-                  src={imageUrl}
-                  alt="Vista previa"
-                  className="max-w-xs mx-auto"
+            {/* Position */}
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-700 font-medium gap-2">
+                <Briefcase className="w-5 h-5 text-lime-600" />
+                Cargo
+              </label>
+              <input
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-lime-500 focus:ring-2 focus:ring-lime-200 transition-all"
+                type="text"
+                placeholder="Ingresa tu cargo dentro de la Organización"
+                id="position"
+                required
+                onChange={(e) => {
+                  setPosition(e.target.value);
+                }}
+              />
+            </div>
+
+            {/* License Upload */}
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-700 font-medium gap-2">
+                <FileText className="w-5 h-5 text-lime-600" />
+                Licencia o Afiliación
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:border-lime-500 focus:ring-2 focus:ring-lime-200 transition-all"
+                  accept=".pdf,.doc,.docx,image/*"
+                  onChange={handleLicenseChange}
                 />
               </div>
-            )}
+            </div>
 
-            <button className="bg-lime-500 text-[#fff] w-[200px] rounded-md font-medium my-6 mx-auto py-3 px-6 block">
-              Completar Perfil
-            </button>
+            {/* Gender */}
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-700 font-medium gap-2">
+                <User className="w-5 h-5 text-lime-600" />
+                Género
+              </label>
+              <select
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-lime-500 focus:ring-2 focus:ring-lime-200 transition-all"
+                required
+                onChange={(e) => {
+                  setGender(e.target.value);
+                }}
+              >
+                <option value="">Selecciona tu género</option>
+                <option value="man">Hombre</option>
+                <option value="woman">Mujer</option>
+                <option value="other">Otro</option>
+              </select>
+            </div>
 
+            {/* Age */}
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-700 font-medium gap-2">
+                <Calendar className="w-5 h-5 text-lime-600" />
+                Edad
+              </label>
+              <input
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-lime-500 focus:ring-2 focus:ring-lime-200 transition-all"
+                type="number"
+                placeholder="Años"
+                id="age"
+                required
+                onChange={(e) => {
+                  setAge(e.target.value);
+                }}
+              />
+            </div>
+
+            {/* Phone */}
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-700 font-medium gap-2">
+                <Phone className="w-5 h-5 text-lime-600" />
+                Teléfono
+              </label>
+              <input
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-lime-500 focus:ring-2 focus:ring-lime-200 transition-all"
+                type="tel"
+                placeholder="Teléfono"
+                id="phone"
+                required
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                }}
+              />
+            </div>
+
+            {/* Profile Image Upload */}
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-700 font-medium gap-2">
+                <ImageIcon className="w-5 h-5 text-lime-600" />
+                Imagen de Perfil
+              </label>
+              <div
+                {...getRootProps()}
+                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-lime-500 transition-colors cursor-pointer"
+              >
+                <input {...getInputProps()} />
+                <Upload className="w-12 h-12 text-lime-500 mx-auto mb-4" />
+                <p className="text-gray-600">
+                  Arrastra y suelta una imagen aquí, o haz clic para seleccionar una
+                </p>
+              </div>
+              {imageUrl && (
+                <div className="mt-4">
+                  <img
+                    src={imageUrl}
+                    alt="Vista previa"
+                    className="max-w-xs mx-auto rounded-lg shadow-md"
+                  />
+                </div>
+              )}
+            </div>
           </div>
+
+          <button className="w-full bg-lime-500 text-white rounded-lg py-3 px-6 font-medium hover:bg-lime-600 transition-colors focus:ring-4 focus:ring-lime-200">
+            Completar Perfil
+          </button>
         </form>
       </div>
     </div>

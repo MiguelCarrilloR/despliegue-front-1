@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import { UserPlus, Mail, User, Key, Shield, IdCard, Users } from 'lucide-react';
 
 /**
  * Componente que representa el formulario de registro de usuarios.
@@ -114,152 +115,156 @@ function RegisterForm() {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundImage: 'url(https://i.imgur.com/j3KNPyS.jpg)' }}>
-  <div className="max-w-md w-full space-y-8 p-8 bg-white bg-opacity-90 shadow-lg rounded-lg">
-    <div className="text-center">
-      <img
-        src="https://i.imgur.com/anUuFBV.png"
-        alt="Logo Promesas"
-        className="w-full h-full object-cover"
-      />
-      <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-        Registrarse
-      </h2>
+    <div className="min-h-screen bg-gradient-to-br from-lime-50 to-lime-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-xl">
+        <div className="text-center">
+          <img
+            src="https://i.imgur.com/anUuFBV.png"
+            alt="Logo Promesas"
+            className="mx-auto h-32 w-auto rounded-lg shadow-md"
+          />
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900 flex items-center justify-center gap-2">
+            <UserPlus className="h-8 w-8 text-lime-600" />
+            Registrarse
+          </h2>
+        </div>
+
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-5">
+            <div className="relative">
+              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
+                <Mail className="h-4 w-4 text-lime-600" />
+                Correo Electrónico
+              </label>
+              <input
+                type="email"
+                required
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                placeholder="nombre@ejemplo.com"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="relative">
+              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
+                <User className="h-4 w-4 text-lime-600" />
+                Nombre Completo
+              </label>
+              <input
+                type="text"
+                required
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                placeholder="Tu nombre completo"
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div className="relative">
+              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
+                <IdCard className="h-4 w-4 text-lime-600" />
+                Tipo de Identificación
+              </label>
+              <select
+                required
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                onChange={(e) => setTypeId(e.target.value)}
+              >
+                <option value="">Selecciona tipo de ID</option>
+                <option value="cc">Cédula de Ciudadanía</option>
+                <option value="ti">Tarjeta de Identidad</option>
+                <option value="ce">Cédula de Extranjería</option>
+                <option value="c">Contraseña</option>
+                <option value="p">Pasaporte</option>
+              </select>
+            </div>
+
+            <div className="relative">
+              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
+                <Shield className="h-4 w-4 text-lime-600" />
+                Número de Identificación
+              </label>
+              <input
+                type="number"
+                required
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                placeholder="Número de identificación"
+                onChange={(e) => setId(e.target.value)}
+              />
+            </div>
+
+            <div className="relative">
+              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
+                <Key className="h-4 w-4 text-lime-600" />
+                Contraseña
+              </label>
+              <input
+                type="password"
+                required
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                placeholder="********"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className="relative">
+              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
+                <Key className="h-4 w-4 text-lime-600" />
+                Confirmar Contraseña
+              </label>
+              <input
+                type="password"
+                required
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                placeholder="********"
+                onChange={(e) => setRepassword(e.target.value)}
+              />
+            </div>
+
+            <div className="relative">
+              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
+                <Users className="h-4 w-4 text-lime-600" />
+                Rol
+              </label>
+              <select
+                required
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="">Selecciona tu rol</option>
+                <option value="scout">Reclutador</option>
+                <option value="player">Jugadora</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-lime-600 hover:bg-lime-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500 transition-colors duration-200"
+              disabled={loading}
+            >
+              {loading ? (
+                "Procesando..."
+              ) : (
+                <>
+                  <UserPlus className="h-5 w-5 mr-2" />
+                  Crear cuenta
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+
+        <div className="text-sm text-center">
+          <p className="text-gray-700">
+            ¿Ya tienes una cuenta?{" "}
+            <Link to="/login" className="font-medium text-lime-600 hover:text-lime-700 transition-colors duration-200">
+              Ingresa aquí
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
-    <form className="space-y-6" onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Correo Electrónico
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-lime-500 focus:border-lime-500 sm:text-sm"
-          placeholder="Ingresa tu correo"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Nombre Completo
-        </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-lime-500 focus:border-lime-500 sm:text-sm"
-          placeholder="Ingresa tu nombre"
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="typeid" className="block text-sm font-medium text-gray-700">
-          Tipo de Identificación
-        </label>
-        <select
-          id="typeid"
-          name="typeid"
-          required
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-lime-500 focus:border-lime-500 sm:text-sm"
-          onChange={(e) => setTypeId(e.target.value)}
-        >
-          <option value="">Selecciona tu tipo de Identificación</option>
-          <option value="cc">Cédula de Ciudadanía</option>
-          <option value="ti">Tarjeta de Identidad</option>
-          <option value="ce">Cédula de Extranjería</option>
-          <option value="c">Contraseña</option>
-          <option value="p">Pasaporte</option>
-        </select>
-      </div>
-
-      <div>
-        <label htmlFor="id" className="block text-sm font-medium text-gray-700">
-          Número de Identificación
-        </label>
-        <input
-          id="id"
-          name="id"
-          type="number"
-          required
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-lime-500 focus:border-lime-500 sm:text-sm"
-          placeholder="Ingresa tu Número de Identificación"
-          onChange={(e) => setId(e.target.value)}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Contraseña
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-lime-500 focus:border-lime-500 sm:text-sm"
-          placeholder="Ingresa tu contraseña"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="repassword" className="block text-sm font-medium text-gray-700">
-          Confirmar Contraseña
-        </label>
-        <input
-          id="repassword"
-          name="repassword"
-          type="password"
-          required
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-lime-500 focus:border-lime-500 sm:text-sm"
-          placeholder="Repite tu contraseña"
-          onChange={(e) => setRepassword(e.target.value)}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-          Rol
-        </label>
-        <select
-          id="role"
-          name="role"
-          required
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-lime-500 focus:border-lime-500 sm:text-sm"
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="">Selecciona tu rol</option>
-          <option value="scout">Reclutador</option>
-          <option value="player">Jugadora</option>
-        </select>
-      </div>
-
-      <div>
-        <button
-          type="submit"
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-lime-600 hover:bg-lime-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500"
-          disabled={loading}
-        >
-          {loading ? "Enviando..." : "Registrar"}
-        </button>
-      </div>
-    </form>
-
-    <div className="text-sm text-center mt-4">
-      <p className="text-gray-700">
-        ¿Ya tienes una cuenta? 
-        <Link to="/login" className="font-medium text-lime-600 hover:text-lime-500">
-          Ingresa aquí
-        </Link>
-      </p>
-    </div>
-  </div>
-</div>
 
   );
 }

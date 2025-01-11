@@ -1,7 +1,7 @@
 import React from "react";
-import NavbarLogin from "../components/Navbar/NavbarLogin";
 import Footer from "../components/Footer/Footer";
 import RegisterForm from "../components/Register/RegisterForm";
+import Navbar from "../components/Navbar/Navbar";
 
 /**
  * Componente que representa la página de registro de usuarios.
@@ -13,7 +13,7 @@ import RegisterForm from "../components/Register/RegisterForm";
 function RegisterPage() {
   return (
     <>
-      <NavbarLogin />
+      <Navbar />
       <RegisterForm />
       <Footer />
     </>

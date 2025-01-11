@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IoChatbubbleEllipses } from "react-icons/io5";
+import { MessageCircle, Search, Filter, ChevronRight } from 'lucide-react';
 
 const ScoutFilters = () => {
   const [players, setPlayers] = useState([]);
@@ -10,11 +11,12 @@ const ScoutFilters = () => {
   const [maxHeight, setMaxHeight] = useState(200); // Estado para la altura máxima ajustable, inicializado al máximo
   const [position, setPosition] = useState(""); // Estado para la posición seleccionada
   const [foot, setFoot] = useState(""); // Estado para el pie hábil
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const navigate = useNavigate();
 
   const fetchPlayers = useCallback(async () => {
-    
+
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/`);
       const playerData = response.data.filter(
@@ -38,7 +40,7 @@ const ScoutFilters = () => {
       const parsedUser = JSON.parse(user);
       const userRole = parsedUser.role;
       const userStatus = parsedUser.state;
-  
+
       if (userRole !== "scout" || userStatus === "pending") {
         navigate("/unauthorized");
       }
@@ -46,7 +48,7 @@ const ScoutFilters = () => {
       navigate("/unauthorized");
     }
     fetchPlayers();
-  }, [fetchPlayers, navigate]);  
+  }, [fetchPlayers, navigate]);
 
   const handleAgeChange = (event) => {
     setMaxAge(event.target.value);
@@ -136,206 +138,232 @@ const ScoutFilters = () => {
   };
 
   return (
-    <div className="my-20 px-4">
-      <div className="shadow-lg p-6 border rounded-lg max-w-[1240px] mx-auto mb-8">
-        <h1 className="md:text-6xl sm:text-5xl text-4xl font-bold py-2 text-center">
-          Mi perfil
-        </h1>
-      </div>
-      <div className="max-w-[1240px] mx-auto">
-        <div className="grid lg:grid-cols-2 gap-4 shadow-lg p-6 border rounded-lg hover:scale-105 duration-300 relative">
-          <div className="flex justify-center items-center">
-            <img
-              src={JSON.parse(localStorage.getItem("user")).photo}
-              alt="Player"
-              className="rounded-full w-64 h-64 object-cover shadow-lg"
-            />
+    <div className="min-h-screen bg-gray-50 pt-24 px-4 pb-16">
+      {/* Profile Section */}
+      <div className="max-w-7xl mx-auto mb-12">
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div className="bg-lime-500/10 p-6">
+            <h1 className="text-3xl font-bold text-center text-gray-800">
+              Mi Perfil de Reclutador
+            </h1>
           </div>
-          <div className="flex flex-col justify-center">
-            <>
-              <h1 className="text-3xl font-bold mb-4">
-                Información del reclutador
-              </h1>
-              <h2 className="text-2xl md:text-4xl font-bold mb-4">
-                {JSON.parse(localStorage.getItem("user")).name}
-              </h2>
-              <p className="mb-2">
-                <span className="font-bold">Email:</span>{" "}
-                {JSON.parse(localStorage.getItem("user")).email}
-              </p>
-              <p className="mb-2">
-                <span className="font-bold">Tipo de Identificación:</span>{" "}
-                {translateTypeId(
-                  JSON.parse(localStorage.getItem("user")).typeid
-                )}
-              </p>
-              <p className="mb-2">
-                <span className="font-bold">Número de Identificación:</span>{" "}
-                {JSON.parse(localStorage.getItem("user")).identification}
-              </p>
-              <p className="mb-2">
-                <span className="font-bold">Edad:</span>{" "}
-                {JSON.parse(localStorage.getItem("user")).age}
-              </p>
-              <p className="mb-2">
-                <span className="font-bold">Género:</span>{" "}
-                {translateGenderScout(
-                  JSON.parse(localStorage.getItem("user")).gender
-                )}
-              </p>
-              <p className="mb-2">
-                <span className="font-bold">Organización:</span>{" "}
-                {JSON.parse(localStorage.getItem("user")).organization}
-              </p>
-              <p className="mb-2">
-                <span className="font-bold">Cargo:</span>{" "}
-                {JSON.parse(localStorage.getItem("user")).position}
-              </p>
-              <p className="mb-2">
-                <span className="font-bold">Teléfono:</span>{" "}
-                {JSON.parse(localStorage.getItem("user")).phone}
-              </p>
-            </>
-          </div>
-        </div>
-      </div>
-      <div className="shadow-lg p-6 border rounded-lg max-w-[1240px] mx-auto mb-8 my-20">
-        <h1 className="md:text-6xl sm:text-5xl text-4xl font-bold py-2 text-center">
-          Lista de Jugadoras
-        </h1>
-      </div>
-      <div className="flex flex-col lg:flex-row my-20">
-        <div className="w-full lg:w-1/4 p-4 shadow-lg mb-6 lg:mb-0">
-          <h2 className="md:text-4xl sm:text-3xl text-2xl font-bold py-2">
-            Filtros de búsqueda
-          </h2>
 
-          <label className="text-black block mb-4">
-            Edad máxima: {maxAge}
-            <input
-              type="range"
-              min="18"
-              max="30"
-              value={maxAge}
-              onChange={handleAgeChange}
-              className="block mt-2 w-full appearance-none bg-gray-200 h-2 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-            />
-          </label>
-
-          <label className="text-black block mb-4">
-            Peso máximo: {maxWeight} kg
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={maxWeight}
-              onChange={handleWeightChange}
-              className="block mt-2 w-full appearance-none bg-gray-200 h-2 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-            />
-          </label>
-
-          <label className="text-black block mb-4">
-            Altura máxima: {maxHeight} cm
-            <input
-              type="range"
-              min="100"
-              max="200"
-              value={maxHeight}
-              onChange={handleHeightChange}
-              className="block mt-2 w-full appearance-none bg-gray-200 h-2 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-            />
-          </label>
-
-          <label className="text-black block mb-4">
-            Posición:
-            <select
-              value={position}
-              onChange={handlePositionChange}
-              className="p-3 flex w-full rounded-md text-black border border-lime-500 mt-2"
-            >
-              <option value="">Todas</option>
-              <option value="goalkeeper">Portera</option>
-              <option value="defender">Defensora</option>
-              <option value="midfielder">Centrocampista</option>
-              <option value="attacker">Delantera</option>
-            </select>
-          </label>
-
-          <label className="text-black block mb-4">
-            Pie Hábil:
-            <select
-              value={foot}
-              onChange={handleFootChange}
-              className="p-3 flex w-full rounded-md text-black border border-lime-500 mt-2"
-            >
-              <option value="">Cualquiera</option>
-              <option value="right">Derecha</option>
-              <option value="left">Izquierda</option>
-              <option value="both">Ambos</option>
-            </select>
-          </label>
-        </div>
-
-        <div className="w-full lg:w-3/4 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {players.length > 0 ? (
-            players.map((player) => (
-              <div
-                key={player._id}
-                className="p-4 bg-white shadow-md rounded-lg hover:scale-105 duration-300"
-              >
-                {player.name && (
-                  <h2 className="text-black text-xl font-bold text-center">
-                    {player.name}
-                  </h2>
-                )}
-                {player.photo && (
-                  <img
-                    src={player.photo}
-                    className="w-[200px] h-[200px] mx-auto my-4 rounded-lg"
-                    alt={`${player.name}`}
-                  />
-                )}
-                {player.age && <p className="text-black">Edad: {player.age}</p>}
-                {player.weight && (
-                  <p className="text-black">Peso: {player.weight} kg</p>
-                )}
-                {player.height && (
-                  <p className="text-black">Altura: {player.height} cm</p>
-                )}
-                {player.genposition && (
-                  <p className="text-black">
-                    Posición: {translatePosition(player.genposition)}
-                  </p>
-                )}
-                {player.foot && (
-                  <p className="text-black">
-                    Pie Hábil: {translateFoot(player.foot)}
-                  </p>
-                )}
-                {player.score && (
-                  <p className="text-black">
-                    Puntaje de Aceptación: {(player.score * 100).toFixed(1)} %
-                  </p>
-                )}
-
-                <button
-                  onClick={() => handleMoreInfoClick(player._id)}
-                  className="bg-lime-500 text-[#000] w-full rounded-md font-medium my-6 mx-auto py-3 hover:scale-105 duration-300"
-                >
-                  Más información
-                </button>
+          <div className="grid lg:grid-cols-5 gap-8 p-6">
+            <div className="lg:col-span-2 flex flex-col items-center">
+              <div className="relative">
+                <img
+                  src={user.photo}
+                  alt="Profile"
+                  className="w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg"
+                />
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-lime-500 text-white px-4 py-1 rounded-full text-sm">
+                  Reclutador
+                </div>
               </div>
-            ))
-          ) : (
-            <p>No hay jugadoras disponibles.</p>
-          )}
+            </div>
+
+            <div className="lg:col-span-3 space-y-4">
+              <h2 className="text-3xl font-bold text-gray-800">{user.name}</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="font-medium">{user.email}</p>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500">Tipo de ID</p>
+                    <p className="font-medium">{translateTypeId(user.typeid)}</p>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500">Número de ID</p>
+                    <p className="font-medium">{user.identification}</p>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500">Edad</p>
+                    <p className="font-medium">{user.age}</p>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500">Género</p>
+                    <p className="font-medium">{translateGenderScout(user.gender)}</p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500">Organización</p>
+                    <p className="font-medium">{user.organization}</p>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500">Cargo</p>
+                    <p className="font-medium">{user.position}</p>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500">Teléfono</p>
+                    <p className="font-medium">{user.phone}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <IoChatbubbleEllipses
-        className="fixed bottom-4 right-4 text-6xl text-lime-500 hover:scale-105 duration-300 cursor-pointer"
-        title="Chat"
+
+      {/* Players Section */}
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-3xl font-bold text-gray-800">Lista de Jugadoras</h2>
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  type="text"
+                  placeholder="Buscar jugadora..."
+                  className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Filters */}
+            <div className="lg:w-1/4">
+              <div className="bg-gray-50 rounded-xl p-4 space-y-4">
+                <div className="flex items-center space-x-2 mb-4">
+                  <Filter className="h-5 w-5 text-gray-600" />
+                  <h3 className="text-lg font-semibold">Filtros</h3>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <label className="text-sm font-medium text-gray-700">Edad máxima</label>
+                    <span className="text-sm text-gray-500">{maxAge} años</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="18"
+                    max="30"
+                    value={maxAge}
+                    onChange={handleAgeChange}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-lime-500"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <label className="text-sm font-medium text-gray-700">Peso máximo</label>
+                    <span className="text-sm text-gray-500">{maxWeight} kg</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={maxWeight}
+                    onChange={handleWeightChange}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-lime-500"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <label className="text-sm font-medium text-gray-700">Altura máxima</label>
+                    <span className="text-sm text-gray-500">{maxHeight} cm</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="100"
+                    max="200"
+                    value={maxHeight}
+                    onChange={handleHeightChange}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-lime-500"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Posición</label>
+                  <select
+                    value={position}
+                    onChange={handlePositionChange}
+                    className="w-full p-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
+                  >
+                    <option value="">Todas</option>
+                    <option value="goalkeeper">Portera</option>
+                    <option value="defender">Defensora</option>
+                    <option value="midfielder">Centrocampista</option>
+                    <option value="attacker">Delantera</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Pie Hábil</label>
+                  <select
+                    value={foot}
+                    onChange={handleFootChange}
+                    className="w-full p-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
+                  >
+                    <option value="">Cualquiera</option>
+                    <option value="right">Derecha</option>
+                    <option value="left">Izquierda</option>
+                    <option value="both">Ambos</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Players Grid */}
+            <div className="lg:w-3/4">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {players.length > 0 ? (
+                  players.map((player) => (
+                    <div key={player._id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-4">
+                      <div className="relative mb-4">
+                        <img
+                          src={player.photo}
+                          alt={player.name}
+                          className="w-full h-48 object-cover rounded-lg"
+                        />
+                        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm">
+                          {(player.score * 100).toFixed(1)}%
+                        </div>
+                      </div>
+
+                      <h3 className="text-lg font-bold mb-2">{player.name}</h3>
+
+                      <div className="space-y-1 text-sm text-gray-600 mb-4">
+                        <p>Edad: {player.age} años</p>
+                        <p>Altura: {player.height} cm</p>
+                        <p>Peso: {player.weight} kg</p>
+                        <p>Posición: {translatePosition(player.genposition)}</p>
+                        <p>Pie Hábil: {translateFoot(player.foot)}</p>
+                      </div>
+
+                      <button
+                        onClick={() => handleMoreInfoClick(player._id)}
+                        className="w-full bg-lime-500 text-white rounded-lg py-2 px-4 hover:bg-lime-600 transition-colors flex items-center justify-center space-x-2"
+                      >
+                        <span>Ver Perfil</span>
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-8 text-gray-500">
+                    No hay jugadoras que coincidan con los filtros seleccionados.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Chat Button */}
+      <button
         onClick={handleChat}
-      />
+        className="fixed bottom-6 right-6 bg-lime-500 text-white p-4 rounded-full shadow-lg hover:bg-lime-600 transition-colors"
+        title="Chat"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </button>
     </div>
   );
 };

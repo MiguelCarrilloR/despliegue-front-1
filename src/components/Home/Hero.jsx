@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import TypingEffect from "react-typing-effect"; // Importar el componente
@@ -15,7 +16,7 @@ import TypingEffect from "react-typing-effect"; // Importar el componente
 const Hero = () => {
   return (
     <div className="relative text-white h-screen">
-      <img src="https://i.imgur.com/kAAoWpn.png" className="absolute w-full h-full object-cover"/>
+      <img src="https://i.imgur.com/kAAoWpn.png" className="absolute w-full h-full object-cover" />
       <div className="relative z-10 max-w-[1500px] mt-[-96px] w-full h-screen mx-auto text-center flex flex-col justify-center">
         <h1 className="md:text-7xl sm:text-6xl text-4xl font-bold md:py-6">
           Promesas a la Cancha
@@ -38,8 +39,9 @@ const Hero = () => {
           Empieza tu carrera deportiva ahora
         </p>
         <Link to="/login">
-          <button className="bg-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto py-3 text-black">
-            Empieza ya
+          <button className="group bg-green-600 text-white px-8 py-4 rounded-lg my-6 mx-auto font-semibold shadow-lg hover:bg-green-500 transition-all duration-300 flex items-center gap-2">
+            Comienza ahora
+            <ArrowRight className="group-hover:translate-x-1 transition-transform" />
           </button>
         </Link>
       </div>

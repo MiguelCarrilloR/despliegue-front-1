@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { IoIosArrowRoundBack } from "react-icons/io";
+import { Search, Send, ArrowLeft, Menu } from 'lucide-react';
 
 const socket = io(`${import.meta.env.VITE_API_URL}`);
 
@@ -21,6 +21,7 @@ function Chat() {
   const { username } = useParams();
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState("");
+  const [showSidebar, setShowSidebar] = React.useState(false);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -64,7 +65,7 @@ function Chat() {
               msg.to === message.to &&
               msg.content === message.content &&
               new Date(msg.timestamp).getTime() ===
-                new Date(message.timestamp).getTime()
+              new Date(message.timestamp).getTime()
           );
           if (!messageExists) {
             return [...prevMessages, message];
@@ -78,8 +79,7 @@ function Chat() {
       const fetchMessages = async () => {
         try {
           const response = await axios.get(
-            `${
-              import.meta.env.VITE_API_URL
+            `${import.meta.env.VITE_API_URL
             }/api/message/messages/${username}/${to}`
           );
           setMessages(response.data);
@@ -118,7 +118,7 @@ function Chat() {
           msg.to === message.to &&
           msg.content === message.content &&
           new Date(msg.timestamp).getTime() ===
-            new Date(message.timestamp).getTime()
+          new Date(message.timestamp).getTime()
       );
       if (!messageExists) {
         return [...prevMessages, message];
@@ -128,63 +128,89 @@ function Chat() {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/3 bg-gray-100 border-r border-gray-200 p-4 flex flex-col justify-between">
-        <div>
-          <input
-            type="text"
-            placeholder="Buscar usuario"
-            className="w-full p-2 mb-4 border border-gray-300 rounded"
-          />
+    <div className="flex h-screen bg-gray-50 relative">
+      {/* Mobile Menu Button */}
+      <button 
+        onClick={() => setShowSidebar(!showSidebar)}
+        className="md:hidden absolute top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg"
+      >
+        <Menu className="h-6 w-6 text-gray-600" />
+      </button>
+
+      {/* Sidebar */}
+      <div className={`${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transform transition-transform duration-300 fixed md:relative w-80 h-full bg-white shadow-lg z-40 md:m-2 rounded-xl overflow-hidden flex flex-col`}>
+        <div className="p-4">
+          <div className="relative mb-4">
+            <input
+              type="text"
+              placeholder="Buscar usuario"
+              className="w-full pl-10 pr-4 py-2 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+            />
+            <Search className="absolute left-3 top-2.5 text-gray-400 h-5 w-5" />
+          </div>
+          
           {users.length === 0 ? (
-            <p className="text-gray-500">
-              {userRole === "scout"
-                ? "Contacta jugadoras para empezar un chat."
-                : "Aún no te ha contactado ningún reclutador, sigue mejorando tu perfil para obtener mejores oportunidades."}
-            </p>
+            <div className="text-gray-500 p-4 text-center bg-gray-50 rounded-lg">
+              <p className="text-sm">
+                {userRole === "scout"
+                  ? "Contacta jugadoras para empezar un chat"
+                  : "Aún no te ha contactado ningún reclutador. Sigue mejorando tu perfil para obtener mejores oportunidades."}
+              </p>
+            </div>
           ) : (
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               {users.map((user) => (
                 <li
                   key={user.email}
-                  className={`flex items-center p-2 rounded cursor-pointer ${
-                    user.name === to ? "bg-lime-100" : ""
+                  onClick={() => {
+                    setTo(user.name);
+                    setShowSidebar(false);
+                  }}
+                  className={`flex items-center p-3 rounded-lg transition-all hover:bg-gray-50 cursor-pointer ${
+                    user.name === to ? "bg-lime-50 border-l-4 border-lime-500" : ""
                   }`}
-                  onClick={() => setTo(user.name)}
                 >
                   <img
-                    src={`${user.photo}`}
+                    src={user.photo}
                     alt={user.name}
-                    className="w-10 h-10 rounded-full mr-3"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
                   />
-                  <div>
-                    <p className="font-bold">{user.name}</p>
+                  <div className="ml-3">
+                    <p className="font-semibold text-gray-800">{user.name}</p>
+                    <p className="text-xs text-gray-500">Online</p>
                   </div>
                 </li>
               ))}
             </ul>
           )}
         </div>
-        <div className="mb-8">
+        
+        <div className="mt-auto p-4 border-t">
           <img
             src="https://i.imgur.com/anUuFBV.png"
             alt="Logo Promesas"
-            className="w-full h-auto"
+            className="w-32 mx-auto opacity-75 hover:opacity-100 transition-opacity"
           />
         </div>
       </div>
-      <div className="flex-1 flex flex-col">
-        <div className="flex items-center p-4 border-b border-gray-200">
+
+      {/* Chat Area */}
+      <div className="flex-1 flex flex-col bg-white md:m-2 md:ml-0 rounded-xl shadow-lg overflow-hidden">
+        {/* Chat Header */}
+        <div className="flex items-center px-6 py-3 border-b border-gray-200 bg-white">
           <img
             src={`https://ui-avatars.com/api/?name=${to}`}
             alt={to}
-            className="w-10 h-10 rounded-full mr-3"
+            className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
           />
-          <div>
-            <p className="font-bold">{to}</p>
+          <div className="ml-3">
+            <p className="font-semibold text-gray-800">{to}</p>
+            <p className="text-xs text-gray-500">Activo ahora</p>
           </div>
         </div>
-        <div className="flex-1 p-4 overflow-y-auto">
+
+        {/* Messages */}
+        <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
           {messages.map((message, index) => (
             <div
               key={index}
@@ -193,24 +219,32 @@ function Chat() {
               }`}
             >
               <div
-                className={`p-2 rounded ${
-                  message.from === username ? "bg-lime-100" : "bg-gray-200"
-                } max-w-xs`}
+                className={`p-3 rounded-lg shadow-sm max-w-[85%] md:max-w-md ${
+                  message.from === username 
+                    ? "bg-lime-500 text-white" 
+                    : "bg-white text-gray-800"
+                }`}
               >
-                <p>{message.content}</p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-sm break-words">{message.content}</p>
+                <p className={`text-xs mt-1 ${
+                  message.from === username 
+                    ? "text-lime-100" 
+                    : "text-gray-500"
+                }`}>
                   {new Date(message.timestamp).toLocaleString()}
                 </p>
               </div>
             </div>
           ))}
         </div>
-        <div className="p-4 border-t border-gray-200">
+
+        {/* Input Area */}
+        <div className="px-4 py-3 bg-white border-t border-gray-200">
           <div className="flex space-x-2">
             <input
               type="text"
-              placeholder="Escribe aquí"
-              className="flex-1 p-2 border border-gray-300 rounded"
+              placeholder="Escribe un mensaje..."
+              className="flex-1 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={(e) => {
@@ -219,22 +253,32 @@ function Chat() {
                 }
               }}
             />
-
             <button
               onClick={handleSendMessage}
-              className="p-2 bg-lime-500 text-white rounded"
+              className="p-2 bg-lime-500 text-white rounded-lg hover:bg-lime-600 transition-colors focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2"
             >
-              ➤
+              <Send className="h-5 w-5" />
             </button>
           </div>
         </div>
       </div>
+
+      {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
-        className="absolute bottom-4 left-4 bg-lime-500 text-[#000] rounded-md font-medium py-3 px-6 flex items-center hover:scale-105 duration-300 my-2"
+        className="fixed bottom-4 left-4 bg-lime-500 text-white rounded-lg px-4 py-2 flex items-center space-x-2 hover:bg-lime-600 transition-colors focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 z-50"
       >
-        <IoIosArrowRoundBack className="mr-2" /> Volver
+        <ArrowLeft className="h-5 w-5" />
+        <span className="hidden md:inline">Volver</span>
       </button>
+
+      {/* Overlay for mobile when sidebar is open */}
+      {showSidebar && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
     </div>
   );
 }

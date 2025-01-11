@@ -1,6 +1,5 @@
 import React from "react";
 import TopInfo from "../components/Info/TopInfo";
-import HeroInfo from "../components/Info/HeroInfo";
 import Info from "../components/Info/Info";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/Navbar";
@@ -17,7 +16,6 @@ function PlayerInfoPage() {
     <>
       <Navbar />
       <TopInfo />
-      <HeroInfo />
       <Info />
       <Footer />
     </>

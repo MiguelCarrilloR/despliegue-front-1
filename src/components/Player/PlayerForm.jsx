@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import { Upload, Camera, ChevronDown } from 'lucide-react';
 
 /**
  * Componente para completar el perfil de un jugador.
@@ -175,247 +176,225 @@ const PlayerForm = () => {
   };
 
   return (
-    <div
-  className="w-full h-screen bg-cover bg-center relative"
-  style={{
-    backgroundImage: "url('https://i.imgur.com/jybLDsr.jpg')",
-    paddingBottom: '800px',
-    paddingTop: '900px',
-  }}
->
-  <div className="flex justify-center items-center w-full h-full">
-    <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-3xl">
-      <h1 className="md:text-4xl sm:text-3xl text-2xl font-bold py-2 text-black">
-        Completa tu perfil
-      </h1>
-      <form action="" className="form grid" onSubmit={sentData}>
-        <div className="sm:flex-row items-center justify-between w-full my-8">
-          <label className="text-black">Peso</label>
-          <input
-            className="p-3 flex w-full rounded-md text-black border border-lime-500"
-            type="number"
-            placeholder="Kg"
-            id="weight"
-            required
-            onChange={(e) => {
-              setWeight(e.target.value);
-            }}
-          />
-          <label className="text-black my-8">Altura</label>
-          <input
-            className="p-3 flex w-full rounded-md text-black border border-lime-500"
-            type="number"
-            placeholder="Cm"
-            id="height"
-            required
-            onChange={(e) => {
-              setHeight(e.target.value);
-            }}
-          />
-          <label className="text-black my-8">Posición General</label>
-          <select
-            id="genposition"
-            className="p-3 flex w-full rounded-md text-black border border-lime-500"
-            required
-            onChange={(e) => {
-              setGenPosition(e.target.value);
-            }}
-          >
-            <option value="">Selecciona tu posición</option>
-            <option value="goalkeeper">Portera</option>
-            <option value="defender">Defensora</option>
-            <option value="midfielder">Mediocampista</option>
-            <option value="attacker">Atacante</option>
-          </select>
-          <label className="text-black my-8">Posición Específica</label>
-          <div className="p-3 flex flex-col w-full rounded-md text-black">
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="PO"
-                checked={selectedPositions.includes("PO")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Portera
-            </label>
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="LI"
-                checked={selectedPositions.includes("LI")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Lateral Izquierda
-            </label>
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="LD"
-                checked={selectedPositions.includes("LD")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Lateral Derecha
-            </label>
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="DFC"
-                checked={selectedPositions.includes("DFC")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Defensora Central
-            </label>
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="MI"
-                checked={selectedPositions.includes("MI")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Mediocampista Izquierda
-            </label>
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="MD"
-                checked={selectedPositions.includes("MD")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Mediocampista Derecha
-            </label>
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="MC"
-                checked={selectedPositions.includes("MC")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Mediocampista Central
-            </label>
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="SD"
-                checked={selectedPositions.includes("SD")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Delantera
-            </label>
-            <label className="flex items-center mb-2">
-              <input
-                type="checkbox"
-                value="DC"
-                checked={selectedPositions.includes("DC")}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Delantera Centro
-            </label>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-lime-400 to-lime-600 p-8 my-18">
+            <h1 className="text-3xl md:text-4xl font-bold text-white my-3">
+              Completa tu perfil
+            </h1>
+            <p className="text-lime-50 mt-2">
+              Completa tu información para mejorar tu visibilidad
+            </p>
           </div>
-          <label className="text-black my-8">Años de experiencia</label>
-          <input
-            className="p-3 flex w-full rounded-md text-black border border-lime-500"
-            type="number"
-            placeholder="Años"
-            id="yearsexp"
-            required
-            onChange={(e) => {
-              setYearsExp(e.target.value);
-            }}
-          />
-          <label className="text-black my-8">Descripción</label>
-          <textarea
-            className="p-3 flex w-full h-40 rounded-md text-black border border-lime-500"
-            placeholder="Escribe una breve descripción"
-            id="description"
-            required
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-          />
-          <label className="text-black my-8">Pie de apoyo</label>
-          <select
-            id="foot"
-            className="p-3 flex w-full rounded-md text-black border border-lime-500"
-            required
-            onChange={(e) => {
-              setFoot(e.target.value);
-            }}
-          >
-            <option value="">Selecciona tu pie de apoyo</option>
-            <option value="right">Derecho</option>
-            <option value="left">Izquierdo</option>
-            <option value="both">Ambos</option>
-          </select>
-          <label className="text-black my-8">Edad</label>
-          <input
-            className="p-3 flex w-full rounded-md text-black border border-lime-500"
-            type="number"
-            placeholder="Años"
-            id="age"
-            required
-            onChange={(e) => {
-              setAge(e.target.value);
-            }}
-          />
-          <label className="text-black my-8">Teléfono</label>
-          <input
-            className="p-3 flex w-full rounded-md text-black border border-lime-500"
-            type="tel"
-            placeholder="Teléfono"
-            id="phone"
-            required
-            onChange={(e) => {
-              setPhone(e.target.value);
-            }}
-          />
-        </div>
-        <label className="text-black my-8">Foto de perfil</label>
-        <div
-          {...getRootProps({ className: "dropzone" })}
-          className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-lime-500 rounded-md"
-        >
-          <input
-            {...getInputProps({
-              accept: "image/jpeg, image/png", // Solo aceptar archivos JPEG y PNG
-            })}
-          />
-          <p className="text-black">
-            Arrastra y suelta una imagen aquí, o haz clic para seleccionar
-            una imagen (solo JPEG o PNG).
-          </p>
-        </div>
 
-        {imageUrl && (
-          <div className="mt-4">
-            <img
-              src={imageUrl}
-              alt="Vista previa"
-              className="w-32 h-32 object-cover rounded"
-            />
-          </div>
-        )}
-        <button
-          type="submit"
-          className="mt-8 p-3 w-full bg-lime-500 text-black font-bold rounded-md hover:bg-lime-600 transition duration-300"
-        >
-          Completar perfil
-        </button>
-      </form>
+          {/* Form */}
+          <form onSubmit={sentData} className="p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left Column */}
+              <div className="space-y-6">
+                {/* Weight */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Peso
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Kg"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
+                    required
+                    onChange={(e) => setWeight(e.target.value)}
+                  />
+                </div>
+
+                {/* Height */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Altura
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Cm"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
+                    required
+                    onChange={(e) => setHeight(e.target.value)}
+                  />
+                </div>
+
+                {/* General Position */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Posición General
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200 appearance-none"
+                      required
+                      onChange={(e) => setGenPosition(e.target.value)}
+                    >
+                      <option value="">Selecciona tu posición</option>
+                      <option value="goalkeeper">Portera</option>
+                      <option value="defender">Defensora</option>
+                      <option value="midfielder">Mediocampista</option>
+                      <option value="attacker">Atacante</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  </div>
+                </div>
+
+                {/* Age */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Edad
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Años"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
+                    required
+                    onChange={(e) => setAge(e.target.value)}
+                  />
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Teléfono
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="Teléfono"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
+                    required
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div className="space-y-6">
+                {/* Specific Positions */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Posiciones Específicas
+                  </label>
+                  <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                    {[
+                      { value: "PO", label: "Portera" },
+                      { value: "LI", label: "Lateral Izquierda" },
+                      { value: "LD", label: "Lateral Derecha" },
+                      { value: "DFC", label: "Defensora Central" },
+                      { value: "MI", label: "Mediocampista Izquierda" },
+                      { value: "MD", label: "Mediocampista Derecha" },
+                      { value: "MC", label: "Mediocampista Central" },
+                      { value: "SD", label: "Delantera" },
+                      { value: "DC", label: "Delantera Centro" }
+                    ].map(({ value, label }) => (
+                      <label key={value} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          value={value}
+                          checked={selectedPositions.includes(value)}
+                          onChange={handleCheckboxChange}
+                          className="w-4 h-4 text-lime-600 border-gray-300 rounded focus:ring-lime-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Years of Experience */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Años de experiencia
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Años"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
+                    required
+                    onChange={(e) => setYearsExp(e.target.value)}
+                  />
+                </div>
+
+                {/* Foot */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Pie de apoyo
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200 appearance-none"
+                      required
+                      onChange={(e) => setFoot(e.target.value)}
+                    >
+                      <option value="">Selecciona tu pie de apoyo</option>
+                      <option value="right">Derecho</option>
+                      <option value="left">Izquierdo</option>
+                      <option value="both">Ambos</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Full Width Fields */}
+            <div className="mt-6 space-y-6">
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Descripción
+                </label>
+                <textarea
+                  placeholder="Escribe una breve descripción"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200 h-32"
+                  required
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+
+              {/* Profile Photo */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Foto de perfil
+                </label>
+                <div
+                  {...getRootProps()}
+                  className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-lime-500 transition-colors cursor-pointer"
+                >
+                  <input {...getInputProps()} />
+                  <Camera className="mx-auto h-12 w-12 text-gray-400" />
+                  <p className="mt-2 text-sm text-gray-600">
+                    Arrastra y suelta una imagen aquí, o haz clic para seleccionar
+                  </p>
+                  <p className="text-xs text-gray-500">Solo archivos JPEG o PNG</p>
+                </div>
+                {imageUrl && (
+                  <div className="mt-4">
+                    <img
+                      src={imageUrl}
+                      alt="Vista previa"
+                      className="w-32 h-32 object-cover rounded-lg shadow-md"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="mt-8 w-full bg-gradient-to-r from-lime-500 to-lime-600 text-white font-semibold py-4 rounded-lg hover:from-lime-600 hover:to-lime-700 transition duration-300 shadow-md hover:shadow-lg"
+            >
+              Completar perfil
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-
-
   );
 };
 

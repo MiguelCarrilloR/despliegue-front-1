@@ -8,6 +8,8 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import NavbarDashboard from "../Navbar/NavbarDashboard";
 import Footer from "../Footer/Footer";
+import { ArrowLeft, MessageCircle, Trophy, User, Calendar, Ruler, Weight, Footprints, MapPin, Clock, Star } from 'lucide-react';
+
 
 const socket = io(`${import.meta.env.VITE_API_URL}`);
 
@@ -148,110 +150,161 @@ const PlayerInfo = () => {
     }
   };
 
+  const StatCard = ({ icon: Icon, label, value }) => (
+    <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+      <div className="flex items-center gap-3">
+        <Icon className="h-5 w-5 text-lime-600" />
+        <div>
+          <p className="text-sm text-gray-600">{label}</p>
+          <p className="font-semibold text-gray-900">{value}</p>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <NavbarDashboard />
-      <div className="relative flex flex-col items-center justify-center min-h-screen bg-gray-100 pt-20">
+
+      <div className="relative container mx-auto px-4 pt-24 pb-12">
         <button
           onClick={() => navigate(-1)}
-          className="absolute top-20 left-4 bg-lime-500 text-[#000] rounded-md font-medium py-3 px-6 flex items-center hover:scale-105 duration-300 my-2"
+          className="absolute top-8 left-4 bg-white text-gray-800 rounded-full font-medium py-2 px-4 flex items-center shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-x-1"
         >
-          <IoIosArrowRoundBack className="mr-2" /> Volver
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Volver
         </button>
-        <h1 className="my-20 md:text-6xl sm:text-5xl text-4xl font-bold py-2 text-center">
-          Pérfil de la Jugadora
-        </h1>
-        <div className="p-8 bg-white shadow-md rounded-lg flex flex-col md:flex-row items-center justify-center space-x-8 hover:scale-105 duration-300">
-          {player.photo && (
-            <div className="flex-shrink-0 mb-4 md:mb-0">
-              <img
-                src={player.photo}
-                className="w-[300px] h-[600px] md:w-[500px] md:h-[500px] rounded-lg"
-                alt={`${player.name}`}
-              />
+
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-r from-lime-500 to-lime-600 h-32 md:h-48"></div>
+
+            <div className="relative px-6 pb-8">
+              {player.photo && (
+                <div className="absolute -top-20 left-6 md:-top-24 md:left-8">
+                  <img
+                    src={player.photo}
+                    className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-lg object-cover"
+                    alt={player.name}
+                  />
+                </div>
+              )}
+
+              <div className="pt-16 md:pt-20 ml-0 md:ml-44">
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                  {player.name}
+                </h1>
+                <p className="text-lime-600 font-medium mt-1">
+                  {translatePosition(player.genposition)}
+                </p>
+              </div>
+
+              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <StatCard icon={Calendar} label="Edad" value={`${player.age} años`} />
+                <StatCard icon={Weight} label="Peso" value={`${player.weight} kg`} />
+                <StatCard icon={Ruler} label="Altura" value={`${player.height} cm`} />
+                <StatCard icon={Footprints} label="Pie Hábil" value={translateFoot(player.foot)} />
+              </div>
+
+              <div className="mt-8">
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-lime-600" />
+                    Posiciones Específicas
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {player.natposition.map((position, index) => (
+                      <span
+                        key={index}
+                        className="bg-lime-100 text-lime-700 px-3 py-1 rounded-full text-sm font-medium"
+                      >
+                        {translatePositionEs(position)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <User className="h-5 w-5 text-lime-600" />
+                    Descripción
+                  </h3>
+                  <p className="bg-white border border-gray-100 rounded-xl p-6 text-gray-700 leading-relaxed shadow-sm">
+                    {player.description}
+                  </p>
+                </div>
+
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-lime-50 rounded-xl p-6">
+                    <div className="flex items-center gap-3">
+                      <Clock className="h-6 w-6 text-lime-600" />
+                      <div>
+                        <p className="text-sm text-gray-600">Años de experiencia</p>
+                        <p className="text-2xl font-bold text-gray-900">{player.yearsexp}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-lime-50 rounded-xl p-6">
+                    <div className="flex items-center gap-3">
+                      <Star className="h-6 w-6 text-lime-600" />
+                      <div>
+                        <p className="text-sm text-gray-600">Puntaje de Aceptación</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {(player.score * 100).toFixed(1)}%
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  className="mt-8 bg-lime-600 text-white w-full rounded-xl font-medium py-4 hover:bg-lime-700 transition-colors duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                  onClick={handleMessage}
+                >
+                  <Trophy className="h-5 w-5" />
+                  Contactar Jugadora
+                </button>
+              </div>
             </div>
-          )}
-          <div className="text-black text-lg md:text-xl">
-            <h2 className="text-2xl md:text-4xl font-bold mb-4">
-              {player.name}
+          </div>
+
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Videos Destacados
             </h2>
-            <p className="mb-2">
-              <span className="font-bold">Edad:</span> {player.age}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Peso:</span> {player.weight} kg
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Altura:</span> {player.height} cm
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Pie Hábil:</span>{" "}
-              {translateFoot(player.foot)}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Posición General:</span>{" "}
-              {translatePosition(player.genposition)}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Posiciones Específicas:</span>
-            </p>
-            <ul className="list-disc list-inside mb-4">
-              {player.natposition.map((position, index) => (
-                <li key={index}>{translatePositionEs(position)}</li>
-              ))}
-            </ul>
-            <p className="mb-2">
-              <span className="font-bold">Descripción:</span>
-            </p>
-            <p className="p-3 flex w-full rounded-md text-black border border-lime-500 mt-2">
-              {player.description}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Años de experiencia:</span>{" "}
-              {player.yearsexp}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Puntaje de Aceptación sugerido:</span>{" "}
-              {(player.score * 100).toFixed(1)}%
-            </p>
-            <button
-              className="bg-lime-500 text-[#000] w-full rounded-md font-medium my-6 mx-auto py-3 hover:scale-105 duration-300"
-              onClick={handleMessage}
-            >
-              Contactar
-            </button>
+            {player.videos && player.videos.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {player.videos.map((video, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <video
+                      src={video}
+                      controls
+                      className="w-full h-[300px] object-cover"
+                    />
+                    <div className="p-4">
+                      <p className="text-gray-700">{video.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-500">No hay videos subidos.</p>
+            )}
           </div>
         </div>
-        <div className="w-full max-w-4xl mt-8">
-          <h2 className="text-2xl md:text-4xl font-bold mb-4 text-center">
-            Videos Subidos
-          </h2>
-          {player.videos && player.videos.length > 0 ? (
-            <ul className="space-y-4">
-              {player.videos.map((video, index) => (
-                <li
-                  key={index}
-                  className="bg-black shadow-md rounded-lg p-4 hover:scale-105 duration-300"
-                >
-                  <video
-                    src={video}
-                    controls
-                    className="w-full h-[300px] rounded-lg"
-                  />
-                  <p className="mt-2 text-center">{video.description}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-center">No hay videos subidos.</p>
-          )}
-        </div>
-        <IoChatbubbleEllipses
-          className="fixed bottom-4 right-4 text-6xl text-lime-500 hover:scale-105 duration-300 cursor-pointer"
-          title="Chat"
+
+        <button
           onClick={handleChat}
-        />
+          className="fixed bottom-8 right-8 bg-lime-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
+        >
+          <MessageCircle className="h-6 w-6" />
+        </button>
       </div>
+
       <Footer />
     </div>
   );

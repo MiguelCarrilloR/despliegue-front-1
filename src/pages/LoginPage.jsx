@@ -1,7 +1,7 @@
 import React from "react";
-import NavbarLogin from "../components/Navbar/NavbarLogin";
 import Footer from "../components/Footer/Footer";
 import LoginForm from "../components/Login/LoginForm";
+import Navbar from "../components/Navbar/Navbar";
 
 /**
  * Componente LoginPage que representa la página de inicio de sesión.
@@ -16,7 +16,7 @@ import LoginForm from "../components/Login/LoginForm";
 function LoginPage() {
   return (
     <>
-      <NavbarLogin />
+      <Navbar />
       <LoginForm />
       <Footer />
     </>

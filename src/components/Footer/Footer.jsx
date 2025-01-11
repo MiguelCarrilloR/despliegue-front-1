@@ -1,102 +1,157 @@
 import React from "react";
-import {
-  FaFacebookSquare,
-  FaGithubSquare,
-  FaInstagram,
-  FaTwitterSquare,
-} from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { 
+  Facebook, 
+  Instagram, 
+  Twitter, 
+  Github, 
+  Mail, 
+  MapPin, 
+  Phone,
+  ChevronRight,
+  Heart
+} from "lucide-react";
 
-/**
- * Componente que representa el pie de página de la aplicación.
- * Este componente incluye enlaces a redes sociales, información adicional y enlaces de contacto.
- *
- * @returns {JSX.Element} El componente Footer.
- */
+const FooterLink = ({ to, children }) => (
+  <Link 
+    to={to}
+    className="flex items-center gap-2 text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300"
+  >
+    <ChevronRight className="w-4 h-4" />
+    <span>{children}</span>
+  </Link>
+);
+
+const SocialLink = ({ href, icon: Icon, label }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="p-2 rounded-lg bg-gray-100 hover:bg-green-100 text-gray-600 hover:text-green-600 transition-all duration-300 transform hover:scale-105"
+    aria-label={label}
+  >
+    <Icon className="w-5 h-5" />
+  </a>
+);
+
 const Footer = () => {
+  const navigation = {
+    información: [
+      { name: 'Jugadoras', to: '/about-players' },
+      { name: 'Reclutadores', to: '/about-scouts' },
+    ],
+    cuenta: [
+      { name: 'Iniciar sesión', to: '/login' },
+      { name: 'Registrarse', to: '/register' },
+    ],
+    legal: [
+      { name: 'Términos y condiciones', to: '/' },
+      { name: 'Política de privacidad', to: '/' }
+    ]
+  };
+
+  const socialLinks = [
+    { icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61561095576509', label: 'Facebook' },
+    { icon: Instagram, href: 'https://www.instagram.com/promesasalacancha/', label: 'Instagram' },
+    { icon: Twitter, href: 'https://x.com/promesas_cancha', label: 'Twitter' },
+    { icon: Github, href: 'https://github.com/AdminPromesas', label: 'GitHub' }
+  ];
+
   return (
-    <div className="bg-white max-w-[1740px] mx-auto py-16 px-4 grid lg:grid-cols-3 gap-8 text-black ">
-      <div>
-        <h1 className="w-full text-3xl font-bold text-black">
-          Promesas a la Cancha
-        </h1>
-        <p className="py-4 text-black">Conoce nuestras redes sociales</p>
-        <div className="flex justify-between md:w-[75%] my-6">
-          <Link
-            to="https://www.facebook.com/profile.php?id=61561095576509"
-            target="_blank"
-          >
-            <FaFacebookSquare
-              size={30}
-              className="text-black hover:scale-105 duration-300"
-            />
-          </Link>
-          <Link
-            to="https://www.instagram.com/promesasalacancha/"
-            target="_blank"
-          >
-            <FaInstagram
-              size={30}
-              className="text-black hover:scale-105 duration-300"
-            />
-          </Link>
-          <Link to="https://x.com/promesas_cancha" target="_blank">
-            <FaTwitterSquare
-              size={30}
-              className="text-black hover:scale-105 duration-300"
-            />
-          </Link>
-          <Link to="https://github.com/AdminPromesas" target="_blank">
-            <FaGithubSquare
-              size={30}
-              className="text-black hover:scale-105 duration-300"
-            />
-          </Link>
+    <footer className="bg-white border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main footer content */}
+        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Brand section */}
+          <div className="space-y-6">
+            <div className="flex items-center">
+              <img
+                src="https://i.imgur.com/anUuFBV.png"
+                alt="Logo"
+                className="h-10 w-auto"
+              />
+              <h1 className="ml-3 text-xl font-bold text-gray-900">
+                Promesas a la Cancha
+              </h1>
+            </div>
+            <p className="text-gray-600">
+              Impulsando el talento futbolístico femenino con tecnología e innovación.
+            </p>
+            <div className="flex space-x-3">
+              {socialLinks.map((social) => (
+                <SocialLink key={social.label} {...social} />
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation sections */}
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+              Información
+            </h2>
+            <ul className="space-y-3">
+              {navigation.información.map((item) => (
+                <li key={item.name}>
+                  <FooterLink to={item.to}>{item.name}</FooterLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+              Cuenta
+            </h2>
+            <ul className="space-y-3">
+              {navigation.cuenta.map((item) => (
+                <li key={item.name}>
+                  <FooterLink to={item.to}>{item.name}</FooterLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact info */}
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+              Contáctanos
+            </h2>
+            <ul className="space-y-3">
+              <li>
+                <a href="/" className="flex items-center gap-2 text-gray-600 hover:text-green-600">
+                  <Mail className="w-4 h-4" />
+                  <span>promesasalacancha@gmail.com</span>
+                </a>
+              </li>
+              <li className="flex items-center gap-2 text-gray-600">
+                <MapPin className="w-4 h-4" />
+                <span>Bogotá, Colombia</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="border-t border-gray-200 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="text-gray-600 text-sm">
+              &copy; {new Date().getFullYear()} Promesas a la Cancha. Todos los derechos reservados.
+            </div>
+            <div className="flex space-x-6">
+              {navigation.legal.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.to}
+                  className="text-sm text-gray-600 hover:text-green-600"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="lg:col-span-2 flex justify-between mt-6">
-        <div>
-          <h6 className="font-medium text-black">Más información</h6>
-          <ul>
-            <Link to="/about-players">
-              <li className="py-2 text-sm text-black hover:scale-105 duration-300">
-                Jugadoras
-              </li>
-            </Link>
-            <Link to="/about-scouts">
-              <li className="py-2 text-sm text-black hover:scale-105 duration-300">
-                Reclutadores
-              </li>
-            </Link>
-          </ul>
-        </div>
-        <div>
-          <h6 className="font-medium text-black">Contacto</h6>
-          <ul>
-            <Link to="/about">
-              <li className="py-2 text-sm text-black hover:scale-105 duration-300">
-                Sobre nosotros
-              </li>
-            </Link>
-          </ul>
-        </div>
-        <div>
-          <h6 className="font-medium text-black">Cuenta</h6>
-          <ul>
-            <Link to="/login">
-              <li className="py-2 text-sm text-black hover:scale-105 duration-300">
-                Iniciar sesión
-              </li>
-            </Link>
-            <Link to="/register">
-              <li className="py-2 text-sm text-black hover:scale-105 duration-300">
-                Registrarse
-              </li>
-            </Link>
-          </ul>
-        </div>
-      </div>
-    </div>
+    </footer>
   );
 };
 

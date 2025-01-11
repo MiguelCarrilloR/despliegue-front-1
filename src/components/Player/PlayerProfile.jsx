@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
+  Info,
+  MessageCircle,
+  Upload,
+  Edit2,
+  User,
+  Weight,
+  Ruler,
+  Footprints,
+  Award,
+  CircleUserRound,
+  FileText,
+  Clock
+} from 'lucide-react';
+import {
   LinearProgress,
   Box,
   Typography,
@@ -54,8 +68,7 @@ function PlayerProfile() {
 
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/algorithm/recommendation/${
-          JSON.parse(localStorage.getItem("user"))._id
+        `${import.meta.env.VITE_API_URL}/api/algorithm/recommendation/${JSON.parse(localStorage.getItem("user"))._id
         }`
       );
       setInfo(response.data.recommendation);
@@ -428,194 +441,245 @@ function PlayerProfile() {
   ];
 
   return (
-    <div className="my-20">
-      <div className="shadow-lg p-6 border rounded-lg max-w-[1240px] mx-auto mb-8">
-        <h1 className="md:text-6xl sm:text-5xl text-4xl font-bold py-2 text-center">
-          Mi perfil
-        </h1>
-      </div>
-      <div className="max-w-[1240px] mx-auto mb-8 px-4">
-        <h2 className="text-lg font-semibold mb-4">
-          Porcentaje de Aceptación:
-        </h2>
-        <div className="flex flex-col sm:flex-row items-center">
-          <div className="w-full mr-2">
-            <div className="w-full bg-gray-300 rounded-full h-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+      {/* Header Section */}
+      <div className="max-w-7xl mx-auto mb-12">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-lime-400 to-lime-600 h-32 relative">
+            <h1 className="absolute bottom-6 left-6 text-4xl font-bold text-white">
+              Mi Perfil
+            </h1>
+          </div>
+
+          {/* Progress Bar Section */}
+          <div className="p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Award className="h-5 w-5 text-lime-600" />
+              <h2 className="text-lg font-semibold">Porcentaje de Aceptación</h2>
+              <Info
+                className="h-4 w-4 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors"
+                onClick={handleIconClick}
+              />
+            </div>
+            <div className="bg-gray-100 rounded-full h-6 overflow-hidden">
               <div
-                className="bg-lime-500 h-4 rounded-full"
+                className="bg-gradient-to-r from-lime-400 to-lime-600 h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2"
                 style={{ width: `${progressValue}%` }}
-              ></div>
+              >
+                <span className="text-xs font-medium text-white">{`${progressValue}%`}</span>
+              </div>
             </div>
           </div>
-          <div className="flex items-center mt-2 sm:mt-0 min-w-[35px]">
-            <span className="text-gray-700">{`${progressValue}%`}</span>
-            <FaInfoCircle
-              className="ml-2 text-gray-500 cursor-pointer hover:text-gray-700"
-              onClick={handleIconClick}
-            />
+        </div>
+      </div>
+
+      {/* Main Profile Section */}
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-8">
+        {/* Left Column - Photo */}
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-2xl shadow-xl p-6 text-center">
+            {playerInfo ? (
+              <div className="space-y-4">
+                <div className="relative inline-block">
+                  <img
+                    src={playerInfo.photo}
+                    alt="Player"
+                    className="w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg mx-auto"
+                  />
+                
+                </div>
+                <h2 className="text-2xl font-bold text-gray-800">{playerInfo.name}</h2>
+                <p className="text-lime-600 font-medium">{translatePosition(playerInfo.genposition)}</p>
+              </div>
+            ) : (
+              <div className="animate-pulse">
+                <div className="w-48 h-48 bg-gray-200 rounded-full mx-auto"></div>
+                <div className="h-4 bg-gray-200 rounded mt-4 mx-auto w-32"></div>
+              </div>
+            )}
           </div>
         </div>
 
-        {openPop && (
-          <div
-            className="absolute z-10 bg-white shadow-lg p-4 rounded-lg mt-2"
-            style={{
-              top: anchorEl?.getBoundingClientRect().bottom + window.scrollY,
-              left: anchorEl?.getBoundingClientRect().left,
-            }}
-          >
-            {loading ? (
-              <p className="text-sm text-gray-500">Cargando...</p>
-            ) : (
-              <p className="text-sm text-gray-700">{info}</p>
-            )}
-            <button
-              className="mt-2 text-xs text-lime-500 hover:underline"
-              onClick={handleClosePop}
-            >
-              Cerrar
-            </button>
-          </div>
-        )}
-      </div>
-      <div className="max-w-[1240px] mx-auto">
-        <div className="grid lg:grid-cols-2 gap-4 shadow-lg p-6 border rounded-lg hover:scale-105 duration-300 relative">
-          <div className="flex justify-center items-center">
+        {/* Right Column - Info */}
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-2xl shadow-xl p-6">
             {playerInfo ? (
-              <img
-                src={playerInfo.photo}
-                alt="Player"
-                className="rounded-full w-64 h-64 object-cover shadow-lg"
-              />
-            ) : (
-              <p>Cargando imagen...</p>
-            )}
-          </div>
-          <div className="flex flex-col justify-center">
-            {playerInfo ? (
-              <>
-                <h1 className="text-3xl font-bold mb-4">
-                  Información de la Jugadora
-                </h1>
-                <h2 className="text-2xl md:text-4xl font-bold mb-4">
-                  {playerInfo.name}
-                </h2>
-                <p className="mb-2">
-                  <span className="font-bold">Tipo de Identificación:</span>{" "}
-                  {translateTypeId(playerInfo.typeid)}
-                </p>
-                <p className="mb-2">
-                  <span className="font-bold">Número de Identificación:</span>{" "}
-                  {playerInfo.identification}
-                </p>
-                <p className="mb-2">
-                  <span className="font-bold">Edad:</span> {playerInfo.age}
-                </p>
-                <p className="mb-2">
-                  <span className="font-bold">Peso:</span> {playerInfo.weight}{" "}
-                  kg
-                </p>
-                <p className="mb-2">
-                  <span className="font-bold">Altura:</span> {playerInfo.height}{" "}
-                  cm
-                </p>
-                <p className="mb-2">
-                  <span className="font-bold">Pie Hábil:</span>{" "}
-                  {translateFoot(playerInfo.foot)}
-                </p>
-                <p className="mb-2">
-                  <span className="font-bold">Posición Géneral:</span>{" "}
-                  {translatePosition(playerInfo.genposition)}
-                </p>
-                <p className="mb-2">
-                  <span className="font-bold">Posiciones Específicas:</span>
-                </p>
-                <ul className="list-disc list-inside mb-4">
-                  {playerInfo.natposition.map((position, index) => (
-                    <li key={index}>{translatePositionEs(position)}</li>
-                  ))}
-                </ul>
-                <p className="mb-2">
-                  <span className="font-bold">Descripción:</span>
-                </p>
-                <p className="p-3 flex w-full rounded-md text-black border border-lime-500 mt-2">
-                  {playerInfo.description}
-                </p>
-                <p className="mb-2">
-                  <span className="font-bold">Años de experiencia:</span>{" "}
-                  {playerInfo.yearsexp}
-                </p>
+              <div className="space-y-6">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-gray-50 p-4 rounded-xl">
+                    <User className="h-5 w-5 text-lime-600 mb-2" />
+                    <p className="text-sm text-gray-500">Edad</p>
+                    <p className="text-lg font-semibold">{playerInfo.age} años</p>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-xl">
+                    <Weight className="h-5 w-5 text-lime-600 mb-2" />
+                    <p className="text-sm text-gray-500">Peso</p>
+                    <p className="text-lg font-semibold">{playerInfo.weight} kg</p>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-xl">
+                    <Ruler className="h-5 w-5 text-lime-600 mb-2" />
+                    <p className="text-sm text-gray-500">Altura</p>
+                    <p className="text-lg font-semibold">{playerInfo.height} cm</p>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-xl">
+                    <Footprints className="h-5 w-5 text-lime-600 mb-2" />
+                    <p className="text-sm text-gray-500">Pie Hábil</p>
+                    <p className="text-lg font-semibold">{translateFoot(playerInfo.foot)}</p>
+                  </div>
+                </div>
+
+                {/* Positions */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                    <Award className="h-5 w-5 text-lime-600" />
+                    Posiciones Específicas
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {playerInfo.natposition.map((position, index) => (
+                      <span
+                        key={index}
+                        className="bg-lime-100 text-lime-700 px-3 py-1 rounded-full text-sm font-medium"
+                      >
+                        {translatePositionEs(position)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-lime-600" />
+                    Descripción
+                  </h3>
+                  <p className="bg-gray-50 p-4 rounded-xl text-gray-700 leading-relaxed">
+                    {playerInfo.description}
+                  </p>
+                </div>
+
+                {/* Experience */}
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-lime-600" />
+                  <span className="font-medium">Años de experiencia:</span>
+                  <span className="text-gray-700">{playerInfo.yearsexp}</span>
+                </div>
+
                 <button
                   onClick={handleClickOpen}
-                  className="bg-lime-500 text-[#000] w-full rounded-md font-medium my-6 mx-auto py-3 hover:scale-105 duration-300"
+                  className="w-full bg-lime-500 hover:bg-lime-600 text-white rounded-xl py-3 font-medium transition-colors flex items-center justify-center gap-2"
                 >
+                  <Edit2 className="h-4 w-4" />
                   Actualizar perfil
                 </button>
-              </>
+              </div>
             ) : (
-              <p>Cargando información...</p>
+              <div className="animate-pulse space-y-4">
+                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              </div>
             )}
           </div>
         </div>
       </div>
-      <div className="shadow-lg p-6 border rounded-lg max-w-[1240px] mx-auto mb-8 my-20 hover:scale-105 duration-300">
-        <h1 className="md:text-6xl sm:text-5xl text-4xl font-bold py-2 text-center">
-          Mis videos
-        </h1>
-        {playerInfo && playerInfo.videos && playerInfo.videos.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-10">
-            {playerInfo.videos.map((video, index) => (
-              <Card key={index} className="hover:scale-105 duration-300">
-                <CardMedia
-                  component="iframe"
-                  height="300"
-                  width="100%"
-                  src={video}
-                  title={`Video ${index + 1}`}
-                />
-                <CardContent>
-                  <Typography variant="body2" color="textSecondary">
-                    Video {index + 1}
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
+
+      {/* Videos Section */}
+      <div className="max-w-7xl mx-auto mt-8">
+        <div className="bg-white rounded-2xl shadow-xl p-6">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <Award className="h-6 w-6 text-lime-600" />
+            Mis Videos
+          </h2>
+
+          {playerInfo?.videos?.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {playerInfo.videos.map((video, index) => (
+                <div key={index} className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                  <video
+                    src={video}
+                    controls
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <p className="text-gray-600 text-sm">Video {index + 1}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500 my-8">
+              Aún no tienes videos subidos, ¡sube para mejorar tu perfil!
+            </p>
+          )}
+
+          <div className="mt-6">
+            <button
+              onClick={() => document.getElementById('upload-video').click()}
+              className="w-full bg-lime-500 hover:bg-lime-600 text-white rounded-xl py-4 font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              <Upload className="h-5 w-5" />
+              Subir Video
+            </button>
+            <input
+              id="upload-video"
+              type="file"
+              accept="video/*"
+              onChange={handleUploadVideo}
+              className="hidden"
+            />
           </div>
-        ) : (
-          <p className="text-center my-10">
-            Aún no tienes videos subidos, ¡sube para mejorar tu perfil!
-          </p>
-        )}
-        <input
-          accept="video/*"
-          style={{ display: "none" }}
-          id="upload-video"
-          type="file"
-          onChange={handleUploadVideo}
-        />
-        <label htmlFor="upload-video">
-          <Button
-            variant="contained"
-            color="success"
-            component="span"
-            className="bg-lime-500 text-[#000] w-full rounded-md font-medium my-6 mx-auto py-3 hover:scale-105 duration-300"
-          >
-            Subir Video
-          </Button>
-        </label>
-        {isUploading && (
-          <Box display="flex" alignItems="center" mt={2}>
-            <Box width="100%" mr={1}>
-              <LinearProgress variant="determinate" value={progress} />
-            </Box>
-            <Box minWidth={35}>
-              <Typography variant="body2" color="textSecondary">
-                {`${Math.round(progress)}%`}
-              </Typography>
-            </Box>
-          </Box>
-        )}
+
+          {isUploading && (
+            <div className="mt-4">
+              <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-lime-500 h-full rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <p className="text-center text-sm text-gray-500 mt-2">
+                Subiendo... {Math.round(progress)}%
+              </p>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Chat Button */}
+      <button
+        onClick={handleChat}
+        className="fixed bottom-8 right-8 bg-lime-500 hover:bg-lime-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </button>
+
+      {/* Info Popup */}
+      {openPop && (
+        <div
+          className="absolute z-50 bg-white rounded-xl shadow-2xl p-4 max-w-xs"
+          style={{
+            top: anchorEl?.getBoundingClientRect().bottom + window.scrollY,
+            left: anchorEl?.getBoundingClientRect().left,
+          }}
+        >
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-lime-500" />
+            </div>
+          ) : (
+            <p className="text-sm text-gray-700">{info}</p>
+          )}
+          <button
+            className="mt-2 text-sm text-lime-600 hover:text-lime-700 font-medium"
+            onClick={handleClosePop}
+          >
+            Cerrar
+          </button>
+        </div>
+
+      )}
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Actualiza tu Información</DialogTitle>
         <DialogContent>
@@ -729,11 +793,8 @@ function PlayerProfile() {
           </Button>
         </DialogActions>
       </Dialog>
-      <IoChatbubbleEllipses
-        className="fixed bottom-4 right-4 text-6xl text-lime-500 hover:scale-105 duration-300 cursor-pointer"
-        title="Chat"
-        onClick={handleChat}
-      />
+
+
     </div>
   );
 }

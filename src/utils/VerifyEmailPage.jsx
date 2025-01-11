@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import NavbarLogin from "../components/Navbar/NavbarLogin";
 import Footer from "../components/Footer/Footer";
+import Navbar from "../components/Navbar/Navbar";
 
 /**
  * Componente que verifica la dirección de correo electrónico del usuario.
@@ -61,7 +61,7 @@ function VerifyEmailPage() {
 
   return (
     <div className="w-full min-h-screen flex flex-col">
-      <NavbarLogin />
+      <Navbar />
 
       <div className="flex-grow flex justify-center items-center bg-gray-100">
         <div className="bg-white p-8 rounded-md shadow-lg max-w-[600px] w-full text-center text-black">

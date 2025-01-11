@@ -8,27 +8,39 @@ import React from "react";
  */
 const Vision = () => {
   return (
-    <div className="w-full bg-white py-16 px-4">
-      <div className="max-w-[1240px] mx-auto grid md:grid-cols-2">
-        <div className="flex flex-col justify-center">
-          <h1 className="md:text-4xl sm:text-3xl text-2xl font-bold py-2 text-green-700">
+    <section
+      className="w-full bg-gray-50 py-20 px-4"
+      aria-labelledby="vision-title"
+    >
+      <div className="max-w-[1240px] mx-auto grid md:grid-cols-2 items-center gap-10">
+        {/* Texto de la visión */}
+        <div className="space-y-6 text-center md:text-left">
+          <h1
+            id="vision-title"
+            className="text-4xl font-extrabold text-green-700"
+          >
             Nuestra Visión
           </h1>
-          <p className="text-center">
+          <p className="text-gray-600 leading-relaxed">
             Visualizamos un futuro en el que nuestra plataforma sea el punto de
-            referencia para la búsqueda y desarrollo de talento futbolístico, no
-            solo en Bogotá sino también en otras regiones. Aspiramos a ser
-            reconocidos por nuestra innovación y compromiso con el desarrollo
-            del deporte femenino.
+            referencia para la búsqueda y desarrollo de talento futbolístico,
+            no solo en Bogotá sino también en otras regiones. 
+          </p>
+          <p className="text-gray-600 leading-relaxed">
+            Aspiramos a ser reconocidos por nuestra innovación, impacto social
+            y compromiso con el desarrollo del deporte femenino, promoviendo la
+            igualdad de oportunidades a través de la tecnología.
           </p>
         </div>
+
+        {/* Imagen representativa */}
         <img
-          className="w-[500px] mx-auto my-4 rounded-lg"
-          src={"https://i.imgur.com/4sCLOFK.jpg"}
-          alt="Visión de la organización"
+          className="w-full max-w-md mx-auto rounded-lg shadow-lg"
+          src="https://i.imgur.com/4sCLOFK.jpg"
+          alt="Representación de la visión de la organización"
         />
       </div>
-    </div>
+    </section>
   );
 };
 
