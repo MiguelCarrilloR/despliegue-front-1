@@ -177,7 +177,6 @@ function Chat() {
                   />
                   <div className="ml-3">
                     <p className="font-semibold text-gray-800">{user.name}</p>
-                    <p className="text-xs text-gray-500">Online</p>
                   </div>
                 </li>
               ))}
@@ -205,7 +204,6 @@ function Chat() {
           />
           <div className="ml-3">
             <p className="font-semibold text-gray-800">{to}</p>
-            <p className="text-xs text-gray-500">Activo ahora</p>
           </div>
         </div>
 
