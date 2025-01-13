@@ -97,7 +97,7 @@ function LoginForm() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/40 backdrop-blur-sm" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 my-6 mb-7">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-6xl mx-auto">
           {/* Left side - Welcome message */}
           <div className="text-white space-y-6 max-w-xl lg:w-1/2">
