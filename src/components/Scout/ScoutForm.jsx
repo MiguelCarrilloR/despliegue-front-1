@@ -298,6 +298,8 @@ const ScoutForm = () => {
                 type="number"
                 placeholder="Años"
                 id="age"
+                min="18"
+                max="80"
                 required
                 onChange={(e) => {
                   setAge(e.target.value);
@@ -317,6 +319,7 @@ const ScoutForm = () => {
                 placeholder="Teléfono"
                 id="phone"
                 required
+                pattern="\d{7,10}"
                 onChange={(e) => {
                   setPhone(e.target.value);
                 }}

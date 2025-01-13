@@ -26,6 +26,29 @@ const PlayerForm = () => {
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
+
+  const positionMapping = {
+    goalkeeper: [{ value: "PO", label: "Portera" }],
+    defender: [
+      { value: "DFC", label: "Defensora Central" },
+      { value: "LI", label: "Lateral Izquierda" },
+      { value: "LD", label: "Lateral Derecha" },
+    ],
+    midfielder: [
+      { value: "MCD", label: "Mediocampista Defensiva" },
+      { value: "MCO", label: "Mediocampista Ofensiva" },
+      { value: "MI", label: "Mediocampista Izquierda" },
+      { value: "MD", label: "Mediocampista Derecha" },
+      { value: "MC", label: "Mediocampista Central" },
+    ],
+    attacker: [
+      { value: "EI", label: "Extrema Izquierda" },
+      { value: "ED", label: "Extrema Derecha" },
+      { value: "SD", label: "Delantera" },
+      { value: "DC", label: "Delantera Centro" },
+    ],
+  };
+
   /**
    * Maneja el cambio de los checkboxes de posiciones.
    *
@@ -33,6 +56,19 @@ const PlayerForm = () => {
    */
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
+
+    if (checked && selectedPositions.length >= 3) {
+      Toastify({
+        text: "Solo puedes seleccionar hasta 3 posiciones.",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#A52A2A",
+      }).showToast();
+      return;
+    }
+
     if (checked) {
       setSelectedPositions([...selectedPositions, value]);
     } else {
@@ -40,6 +76,11 @@ const PlayerForm = () => {
         selectedPositions.filter((position) => position !== value)
       );
     }
+  };
+
+  const handleGenPositionChange = (e) => {
+    setGenPosition(e.target.value);
+    setSelectedPositions([]); // Limpia las posiciones específicas seleccionadas
   };
 
   // Redireccionamiento
@@ -109,6 +150,18 @@ const PlayerForm = () => {
    */
   const sentData = async (e) => {
     e.preventDefault();
+
+    if (selectedPositions.length === 0) {
+      Toastify({
+        text: "Debes seleccionar al menos una posición específica.",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#A52A2A",
+      }).showToast();
+      return;
+    }
 
     let profileImageUrl = null;
     if (imageFile) {
@@ -204,6 +257,8 @@ const PlayerForm = () => {
                     placeholder="Kg"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
                     required
+                    min="40"
+                    max="220"
                     onChange={(e) => setWeight(e.target.value)}
                   />
                 </div>
@@ -218,6 +273,8 @@ const PlayerForm = () => {
                     placeholder="Cm"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
                     required
+                    min="140"
+                    max="210"
                     onChange={(e) => setHeight(e.target.value)}
                   />
                 </div>
@@ -231,7 +288,7 @@ const PlayerForm = () => {
                     <select
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200 appearance-none"
                       required
-                      onChange={(e) => setGenPosition(e.target.value)}
+                      onChange={handleGenPositionChange}
                     >
                       <option value="">Selecciona tu posición</option>
                       <option value="goalkeeper">Portera</option>
@@ -253,6 +310,8 @@ const PlayerForm = () => {
                     placeholder="Años"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
                     required
+                    min="18"
+                    max="40"
                     onChange={(e) => setAge(e.target.value)}
                   />
                 </div>
@@ -267,9 +326,12 @@ const PlayerForm = () => {
                     placeholder="Teléfono"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
                     required
+                    pattern="\d{7,10}" // Solo acepta números entre 7 y 10 dígitos
+                    title="El teléfono debe contener entre 7 y 10 números."
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
+
               </div>
 
               {/* Right Column */}
@@ -280,17 +342,7 @@ const PlayerForm = () => {
                     Posiciones Específicas
                   </label>
                   <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                    {[
-                      { value: "PO", label: "Portera" },
-                      { value: "LI", label: "Lateral Izquierda" },
-                      { value: "LD", label: "Lateral Derecha" },
-                      { value: "DFC", label: "Defensora Central" },
-                      { value: "MI", label: "Mediocampista Izquierda" },
-                      { value: "MD", label: "Mediocampista Derecha" },
-                      { value: "MC", label: "Mediocampista Central" },
-                      { value: "SD", label: "Delantera" },
-                      { value: "DC", label: "Delantera Centro" }
-                    ].map(({ value, label }) => (
+                    {(positionMapping[genposition] || []).map(({ value, label }) => (
                       <label key={value} className="flex items-center">
                         <input
                           type="checkbox"
@@ -302,6 +354,11 @@ const PlayerForm = () => {
                         <span className="ml-2 text-sm text-gray-700">{label}</span>
                       </label>
                     ))}
+                    {selectedPositions.length > 0 && (
+                      <p className="text-sm text-gray-600 mt-2">
+                        Posiciones seleccionadas: {selectedPositions.join(", ")}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -315,6 +372,8 @@ const PlayerForm = () => {
                     placeholder="Años"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
                     required
+                    min="0"
+                    max="20"
                     onChange={(e) => setYearsExp(e.target.value)}
                   />
                 </div>

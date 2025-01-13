@@ -18,6 +18,8 @@ import MessageList from "./components/Admin/MessageList";
 import AboutPage from "./pages/AboutPage";
 import ScoutInfoPage from "./pages/ScoutInfoPage";
 import PlayerInfoPage from "./pages/PlayerInfoPage";
+import TermsAndConditions from "./utils/TermsAndConditions";
+import NotFoundPage from "./utils/NotFoundPage";
 
 /**
  * Define las rutas de la aplicación.
@@ -44,6 +46,8 @@ const routes = [
   { path: "/playerChat/:username", element: <Chat /> },
   { path: "/admin", element: <AdminDashboardPage /> },
   { path: "/admin-messages", element: <MessageList /> },
+  { path: "/terms", element: <TermsAndConditions /> },
+  { path: "*", element: <NotFoundPage /> },
 ];
 
 /**

@@ -20,6 +20,8 @@ function RegisterForm() {
   const [id, setId] = useState("");
   const [typeid, setTypeId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,6 +72,19 @@ function RegisterForm() {
       return;
     }
 
+    if (!acceptedTerms) {
+      Toastify({
+        text: "Debes aceptar los términos y condiciones",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#FFD700",
+      }).showToast();
+      return;
+    }
+    
+
     setLoading(true);
 
     try {
@@ -114,6 +129,24 @@ function RegisterForm() {
     }
   };
 
+  const renderInput = (label, icon, props) => (
+    <div className="relative">
+      <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
+        {icon}
+        {label}
+      </label>
+      <input
+        className={`appearance-none relative block w-full px-3 py-2 border ${
+          errors[props.name] ? 'border-red-500' : 'border-gray-300'
+        } rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent`}
+        {...props}
+      />
+      {errors[props.name] && (
+        <p className="mt-1 text-sm text-red-600">{errors[props.name]}</p>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-lime-50 to-lime-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-xl">
@@ -131,33 +164,31 @@ function RegisterForm() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-5">
-            <div className="relative">
-              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
-                <Mail className="h-4 w-4 text-lime-600" />
-                Correo Electrónico
-              </label>
-              <input
-                type="email"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
-                placeholder="nombre@ejemplo.com"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+            {renderInput(
+              'Correo Electrónico',
+              <Mail className="h-4 w-4 text-lime-600" />,
+              {
+                type: 'email',
+                name: 'email',
+                required: true,
+                placeholder: 'nombre@ejemplo.com',
+                value: email,
+                onChange: (e) => setEmail(e.target.value)
+              }
+            )}
 
-            <div className="relative">
-              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
-                <User className="h-4 w-4 text-lime-600" />
-                Nombre Completo
-              </label>
-              <input
-                type="text"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
-                placeholder="Tu nombre completo"
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
+            {renderInput(
+              'Nombre Completo',
+              <User className="h-4 w-4 text-lime-600" />,
+              {
+                type: 'text',
+                name: 'name',
+                required: true,
+                placeholder: 'Tu nombre completo',
+                value: name,
+                onChange: (e) => setName(e.target.value)
+              }
+            )}
 
             <div className="relative">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
@@ -167,58 +198,57 @@ function RegisterForm() {
               <select
                 required
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                value={typeid}
                 onChange={(e) => setTypeId(e.target.value)}
               >
                 <option value="">Selecciona tipo de ID</option>
                 <option value="cc">Cédula de Ciudadanía</option>
-                <option value="ti">Tarjeta de Identidad</option>
                 <option value="ce">Cédula de Extranjería</option>
-                <option value="c">Contraseña</option>
+                <option value="c">Contraseña Temporal</option>
                 <option value="p">Pasaporte</option>
               </select>
             </div>
 
-            <div className="relative">
-              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
-                <Shield className="h-4 w-4 text-lime-600" />
-                Número de Identificación
-              </label>
-              <input
-                type="number"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
-                placeholder="Número de identificación"
-                onChange={(e) => setId(e.target.value)}
-              />
-            </div>
+            {renderInput(
+              'Número de Identificación',
+              <Shield className="h-4 w-4 text-lime-600" />,
+              {
+                type: 'number',
+                name: 'id',
+                required: true,
+                placeholder: 'Número de identificación',
+                value: id,
+                onChange: (e) => setId(e.target.value),
+                min: "100000",
+                max: "9999999999"
+              }
+            )}
 
-            <div className="relative">
-              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
-                <Key className="h-4 w-4 text-lime-600" />
-                Contraseña
-              </label>
-              <input
-                type="password"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
-                placeholder="********"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+            {renderInput(
+              'Contraseña',
+              <Key className="h-4 w-4 text-lime-600" />,
+              {
+                type: 'password',
+                name: 'password',
+                required: true,
+                placeholder: '********',
+                value: password,
+                onChange: (e) => setPassword(e.target.value)
+              }
+            )}
 
-            <div className="relative">
-              <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
-                <Key className="h-4 w-4 text-lime-600" />
-                Confirmar Contraseña
-              </label>
-              <input
-                type="password"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
-                placeholder="********"
-                onChange={(e) => setRepassword(e.target.value)}
-              />
-            </div>
+            {renderInput(
+              'Confirmar Contraseña',
+              <Key className="h-4 w-4 text-lime-600" />,
+              {
+                type: 'password',
+                name: 'repassword',
+                required: true,
+                placeholder: '********',
+                value: repassword,
+                onChange: (e) => setRepassword(e.target.value)
+              }
+            )}
 
             <div className="relative">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2">
@@ -228,12 +258,38 @@ function RegisterForm() {
               <select
                 required
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                value={role}
                 onChange={(e) => setRole(e.target.value)}
               >
                 <option value="">Selecciona tu rol</option>
                 <option value="scout">Reclutador</option>
                 <option value="player">Jugadora</option>
               </select>
+            </div>
+          </div>
+
+          <div className="relative flex items-start mb-4">
+            <div className="flex items-center h-5">
+              <input
+                id="terms"
+                type="checkbox"
+                required
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded"
+              />
+            </div>
+            <div className="ml-3 text-sm">
+              <label htmlFor="terms" className="font-medium text-gray-700">
+                Acepto los{' '}
+                <Link
+                  to="/terms"
+                  className="text-lime-600 hover:text-lime-700 underline"
+                  target="_blank"
+                >
+                  términos y condiciones
+                </Link>
+              </label>
             </div>
           </div>
 

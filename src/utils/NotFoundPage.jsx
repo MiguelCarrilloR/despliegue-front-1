@@ -1,19 +1,13 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AlarmClock, Home, ShieldOff } from 'lucide-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Search, Home, AlertCircle } from 'lucide-react';
 
-const UnauthorizedPage = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    localStorage.removeItem("user");
-  }, []);
-
+const NotFoundPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-lime-50 to-lime-100 flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full bg-white rounded-xl shadow-2xl p-8 text-center relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-yellow-500 to-red-500"></div>
+        {/* Top decorative bar */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-lime-500 to-lime-600"></div>
         
         {/* Logo */}
         <img
@@ -22,25 +16,28 @@ const UnauthorizedPage = () => {
           className="mx-auto h-32 w-auto rounded-lg shadow-md mb-8"
         />
 
+        {/* 404 Text */}
+        <h1 className="text-8xl font-bold text-lime-600 mb-4">404</h1>
+
         {/* Icon */}
         <div className="mb-6 flex justify-center">
-          <div className="p-4 bg-red-100 rounded-full">
-            <ShieldOff className="h-16 w-16 text-red-500" />
+          <div className="p-4 bg-lime-100 rounded-full">
+            <Search className="h-16 w-16 text-lime-600" />
           </div>
         </div>
 
         {/* Main content */}
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          ¡Estás en fuera de juego!
-        </h1>
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          ¡Fuera del campo!
+        </h2>
         
         <div className="space-y-4 mb-8">
           <p className="text-lg text-gray-600">
-            No tienes autorización para acceder a esta página.
+            La página que buscas se fue al vestuario y no la encontramos.
           </p>
           <div className="flex items-center justify-center space-x-2 text-yellow-600">
-            <AlarmClock className="h-5 w-5" />
-            <p className="text-sm">Tu sesión ha expirado o has sido desconectado</p>
+            <AlertCircle className="h-5 w-5" />
+            <p className="text-sm">Esta URL no existe en nuestro campo de juego</p>
           </div>
         </div>
 
@@ -53,7 +50,7 @@ const UnauthorizedPage = () => {
           Volver al inicio
         </Link>
 
-        {/* Decorative football field lines */}
+        {/* Football field lines decoration */}
         <div className="absolute bottom-0 left-0 w-full h-4 bg-lime-100">
           <div className="relative w-full h-full">
             <div className="absolute top-0 left-1/4 w-px h-full bg-white"></div>
@@ -66,4 +63,4 @@ const UnauthorizedPage = () => {
   );
 };
 
-export default UnauthorizedPage;
+export default NotFoundPage;
