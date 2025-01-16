@@ -62,23 +62,6 @@ function PlayerProfile() {
     navigate(`/playerChat/${username}`);
   };
 
-  const handleIconClick = async (event) => {
-    setAnchorEl(event.currentTarget); // Establece el elemento de anclaje para el Popover
-    setLoading(true); // Muestra un estado de carga mientras se hace la solicitud
-
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/algorithm/recommendation/${JSON.parse(localStorage.getItem("user"))._id
-        }`
-      );
-      setInfo(response.data.recommendation);
-    } catch (error) {
-      setInfo("Error al obtener la información."); // Maneja errores
-    } finally {
-      setLoading(false); // Desactiva el estado de carga
-    }
-  };
-
   const handleClosePop = () => {
     setAnchorEl(null); // Cierra el Popover
   };
@@ -115,22 +98,25 @@ function PlayerProfile() {
       };
 
       const position = positionMap[playerInfo.natposition[0]] || 0;
-      const experience = playerInfo.yearsexp;
+      const yearsexp = playerInfo.yearsexp;
       const videoUploaded = playerInfo.videos.length > 0 ? 1 : 0;
-      const dominantFoot = playerInfo.foot;
+      const foot = playerInfo.foot;
       const versatility = playerInfo.natposition.length > 1 ? 1 : 0;
 
       const payload = {
         email: playerInfo.email,
         position,
-        height: playerInfo.height,
+        height: playerInfo.height / 100,
         weight: playerInfo.weight,
-        experience,
+        yearsexp,
         videoUploaded,
         ambidextrous: playerInfo.dominantFoot === "both" ? 1 : 0,
-        dominantFoot,
+        foot,
         versatility,
       };
+
+      console.log("Payload:", payload);
+
 
       try {
         await axios.post(
@@ -150,7 +136,7 @@ function PlayerProfile() {
         const playerInfo = response.data;
         setPlayerInfo(playerInfo);
         setPositions(playerInfo.natposition || []);
-        setProgressValue(Math.round(playerInfo.score * 100) || 0);
+        setProgressValue(Math.round(playerInfo.score) || 0);
       } catch (error) {
         console.error("Error fetching player info:", error);
       }
@@ -456,10 +442,6 @@ function PlayerProfile() {
             <div className="flex items-center gap-2 mb-3">
               <Award className="h-5 w-5 text-lime-600" />
               <h2 className="text-lg font-semibold">Porcentaje de Aceptación</h2>
-              <Info
-                className="h-4 w-4 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors"
-                onClick={handleIconClick}
-              />
             </div>
             <div className="bg-gray-100 rounded-full h-6 overflow-hidden">
               <div
@@ -486,7 +468,7 @@ function PlayerProfile() {
                     alt="Player"
                     className="w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg mx-auto"
                   />
-                
+
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">{playerInfo.name}</h2>
                 <p className="text-lime-600 font-medium">{translatePosition(playerInfo.genposition)}</p>
