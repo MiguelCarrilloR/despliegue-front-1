@@ -12,7 +12,8 @@ import {
   Award,
   CircleUserRound,
   FileText,
-  Clock
+  Clock,
+  Calculator
 } from 'lucide-react';
 import {
   LinearProgress,
@@ -42,6 +43,7 @@ import { storage } from "../../firebase/FirebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import ProgressBarSection from "./ProgressBarSection";
 
 function PlayerProfile() {
   const [playerInfo, setPlayerInfo] = useState(null);
@@ -68,6 +70,13 @@ function PlayerProfile() {
 
   const openPop = Boolean(anchorEl);
 
+  const calculatePercentage = async (playerInfo) => {
+    // Example calculation logic - replace with actual calculation method
+    const newPercentage = Math.floor(Math.random() * 100);
+    setProgressValue(newPercentage);
+  };
+ 
+ 
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -78,55 +87,6 @@ function PlayerProfile() {
     } else {
       navigate("/unauthorized");
     }
-
-    const evaluateAlgorithm = async (playerInfo) => {
-      // Transformar la información del jugador según las reglas especificadas
-      const positionMap = {
-        PO: 0,
-        DFC: 1,
-        LI: 2,
-        LD: 2,
-        MC: 3,
-        MCD: 4,
-        MCO: 5,
-        MI: 6,
-        MD: 6,
-        EI: 6,
-        ED: 6,
-        SD: 7,
-        DC: 7,
-      };
-
-      const position = positionMap[playerInfo.natposition[0]] || 0;
-      const yearsexp = playerInfo.yearsexp;
-      const videoUploaded = playerInfo.videos.length > 0 ? 1 : 0;
-      const foot = playerInfo.foot;
-      const versatility = playerInfo.natposition.length > 1 ? 1 : 0;
-
-      const payload = {
-        email: playerInfo.email,
-        position,
-        height: playerInfo.height / 100,
-        weight: playerInfo.weight,
-        yearsexp,
-        videoUploaded,
-        ambidextrous: playerInfo.dominantFoot === "both" ? 1 : 0,
-        foot,
-        versatility,
-      };
-
-      console.log("Payload:", payload);
-
-
-      try {
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/algorithm/assign-ranges`,
-          payload
-        );
-      } catch (error) {
-        console.error("Error evaluating algorithm:", error);
-      }
-    };
 
     const fetchPlayerInfo = async () => {
       try {
@@ -148,7 +108,6 @@ function PlayerProfile() {
           `${import.meta.env.VITE_API_URL}/api/user/playerId/${userId}`
         );
         const playerInfo = response.data;
-        await evaluateAlgorithm(playerInfo); // Evaluar el algoritmo primero
         await fetchPlayerInfo(); // Luego obtener la información del jugador actualizada
       } catch (error) {
         console.error("Error initializing data:", error);
@@ -218,23 +177,6 @@ function PlayerProfile() {
         return "Delantera Central";
       default:
         return position;
-    }
-  };
-
-  const translateTypeId = (typeid) => {
-    switch (typeid) {
-      case "cc":
-        return "Cédula de Ciudadanía";
-      case "ti":
-        return "Tarjeta de Identidad";
-      case "ce":
-        return "Cédula de Extranjería";
-      case "p":
-        return "Pasaporte";
-      case "c":
-        return "Contraseña";
-      default:
-        return typeid;
     }
   };
 
@@ -438,20 +380,7 @@ function PlayerProfile() {
           </div>
 
           {/* Progress Bar Section */}
-          <div className="p-6">
-            <div className="flex items-center gap-2 mb-3">
-              <Award className="h-5 w-5 text-lime-600" />
-              <h2 className="text-lg font-semibold">Porcentaje de Aceptación</h2>
-            </div>
-            <div className="bg-gray-100 rounded-full h-6 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-lime-400 to-lime-600 h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2"
-                style={{ width: `${progressValue}%` }}
-              >
-                <span className="text-xs font-medium text-white">{`${progressValue}%`}</span>
-              </div>
-            </div>
-          </div>
+          <ProgressBarSection playerInfo={playerInfo} />
         </div>
       </div>
 
