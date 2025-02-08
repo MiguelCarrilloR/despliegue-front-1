@@ -9,6 +9,7 @@ import "toastify-js/src/toastify.css";
 import NavbarDashboard from "../Navbar/NavbarDashboard";
 import Footer from "../Footer/Footer";
 import { ArrowLeft, MessageCircle, Trophy, User, Calendar, Ruler, Weight, Footprints, MapPin, Clock, Star } from 'lucide-react';
+import ExperienceAndAchievements from "./ExperienceAndAchievements";
 
 
 const socket = io(`${import.meta.env.VITE_API_URL}`);
@@ -162,6 +163,8 @@ const PlayerInfo = () => {
     </div>
   );
 
+
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <NavbarDashboard />
@@ -235,15 +238,7 @@ const PlayerInfo = () => {
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-lime-50 rounded-xl p-6">
-                    <div className="flex items-center gap-3">
-                      <Clock className="h-6 w-6 text-lime-600" />
-                      <div>
-                        <p className="text-sm text-gray-600">Años de experiencia</p>
-                        <p className="text-2xl font-bold text-gray-900">{player.yearsexp}</p>
-                      </div>
-                    </div>
-                  </div>
+                  
 
                   <div className="bg-lime-50 rounded-xl p-6">
                     <div className="flex items-center gap-3">
@@ -268,7 +263,7 @@ const PlayerInfo = () => {
               </div>
             </div>
           </div>
-
+           <ExperienceAndAchievements player={player} />         
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               Videos Destacados

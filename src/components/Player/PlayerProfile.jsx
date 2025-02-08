@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Info,
   MessageCircle,
   Upload,
   Edit2,
   User,
   Weight,
   Ruler,
+  Trophy,
   Footprints,
   Award,
-  CircleUserRound,
+  Activity,
+  Medal,
+  Star,
+  Calendar,
   FileText,
-  Clock,
-  Calculator
 } from 'lucide-react';
 import {
   LinearProgress,
@@ -440,6 +441,69 @@ function PlayerProfile() {
                   </div>
                 </div>
 
+{/* Training & Health Card */}
+<div className="bg-white rounded-2xl shadow-xl p-6">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Activity className="h-5 w-5 text-lime-600" />
+              Entrenamiento y Salud
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-50 p-4 rounded-xl">
+                <p className="text-sm text-gray-500">Horas de Entrenamiento Semanal</p>
+                <p className="text-lg font-semibold">{playerInfo?.trainingHoursPerWeek} horas</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-xl">
+                <p className="text-sm text-gray-500">Historial de Lesiones</p>
+                <p className="text-lg font-semibold">{playerInfo?.injuryHistory || 0}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Experience Timeline */}
+          <div className="bg-white rounded-2xl shadow-xl p-6">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-lime-600" />
+              Experiencia
+            </h3>
+            <div className="space-y-4">
+              {playerInfo?.yearsexp?.map((exp, index) => (
+                <div key={index} className="bg-gray-50 p-4 rounded-xl">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-semibold text-gray-800">{exp.club}</p>
+                      <p className="text-sm text-gray-600">
+                        {exp.startYear} - {exp.endYear || 'Presente'}
+                      </p>
+                    </div>
+                  </div>
+                  {exp.description && (
+                    <p className="text-gray-600 mt-2 text-sm">{exp.description}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Achievements Section */}
+          <div className="bg-white rounded-2xl shadow-xl p-6">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-lime-600" />
+              Logros
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {playerInfo?.achievements?.map((achievement, index) => (
+                <div key={index} className="bg-gray-50 p-4 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    {achievement.type === 'trophy' && <Trophy className="h-4 w-4 text-yellow-500" />}
+                    {achievement.type === 'medal' && <Award className="h-4 w-4 text-blue-500" />}
+                    {achievement.type === 'star' && <Activity className="h-4 w-4 text-purple-500" />}
+                    <p className="font-semibold">{achievement.title}</p>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">{achievement.year}</p>
+                </div>
+              ))}
+            </div>
+          </div>
                 {/* Positions */}
                 <div>
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -469,12 +533,6 @@ function PlayerProfile() {
                   </p>
                 </div>
 
-                {/* Experience */}
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-lime-600" />
-                  <span className="font-medium">Años de experiencia:</span>
-                  <span className="text-gray-700">{playerInfo.yearsexp}</span>
-                </div>
 
                 <button
                   onClick={handleClickOpen}

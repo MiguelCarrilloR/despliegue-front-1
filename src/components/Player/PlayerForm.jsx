@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
-import { Upload, Camera, ChevronDown } from 'lucide-react';
+import { Camera, ChevronDown, Trophy, Activity, Plus, X, CalendarDays, Medal, Star } from 'lucide-react';
 
 /**
  * Componente para completar el perfil de un jugador.
@@ -19,10 +19,27 @@ const PlayerForm = () => {
   const [height, setHeight] = useState("");
   const [genposition, setGenPosition] = useState("");
   const [selectedPositions, setSelectedPositions] = useState([]);
-  const [yearsexp, setYearsExp] = useState("");
+  const [yearsexp, setYearsExp] = useState([]);
   const [description, setDescription] = useState("");
   const [foot, setFoot] = useState("");
   const [phone, setPhone] = useState("");
+  const [achievements, setAchievements] = useState([]);
+  const [injuryHistory, setInjuryHistory] = useState("");
+  const [trainingHoursPerWeek, setTrainingHoursPerWeek] = useState("");
+  const [careerSteps, setCareerSteps] = useState([]);
+  const [showCareerForm, setShowCareerForm] = useState(false);
+  const [showAchievementForm, setShowAchievementForm] = useState(false);
+  const [tempCareerStep, setTempCareerStep] = useState({
+    startYear: '',
+    endYear: '',
+    club: '',
+    description: ''
+  });
+  const [tempAchievement, setTempAchievement] = useState({
+    year: '',
+    title: '',
+    type: 'trophy' // trophy, medal, star
+  });
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
@@ -130,6 +147,40 @@ const PlayerForm = () => {
     }
   };
 
+
+  const handleAddCareerStep = () => {
+    if (tempCareerStep.startYear && tempCareerStep.club) {
+      const updatedCareerSteps = [...careerSteps, tempCareerStep]; // Nuevo estado de careerSteps
+
+      setCareerSteps(updatedCareerSteps);
+      setYearsExp(updatedCareerSteps); // Guardamos los mismos datos en yearsexp
+
+      setTempCareerStep({ startYear: '', endYear: '', club: '', description: '' });
+      setShowCareerForm(false);
+    }
+  };
+
+  const handleAddAchievement = () => {
+    if (tempAchievement.title && tempAchievement.year) {
+      setAchievements([...achievements, tempAchievement]);
+      setTempAchievement({ year: '', title: '', type: 'trophy' });
+      setShowAchievementForm(false);
+    }
+  };
+
+  const AchievementIcon = ({ type }) => {
+    switch (type) {
+      case 'trophy':
+        return <Trophy className="w-6 h-6 text-yellow-500" />;
+      case 'medal':
+        return <Medal className="w-6 h-6 text-blue-500" />;
+      case 'star':
+        return <Star className="w-6 h-6 text-purple-500" />;
+      default:
+        return <Trophy className="w-6 h-6 text-yellow-500" />;
+    }
+  };
+
   // useEffect para controlar el acceso basado en el rol del usuario
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -169,28 +220,37 @@ const PlayerForm = () => {
     }
 
     if (profileImageUrl) {
+      const requestData = {
+        email: JSON.parse(localStorage.getItem("user")).email,
+        weight: weight,
+        height: height,
+        genposition: genposition,
+        natposition: selectedPositions,
+        yearsexp: yearsexp,
+        description: description,
+        foot: foot,
+        age: age,
+        phone: phone,
+        achievements: achievements,
+        injuryHistory: injuryHistory,
+        trainingHoursPerWeek: trainingHoursPerWeek,
+        photo: profileImageUrl,
+      };
+
+      console.log("Datos enviados a la API:", requestData); // 🔍 Verificar en consola
+
       axios
-        .put(`${import.meta.env.VITE_API_URL}/api/user/update-user`, {
-          email: JSON.parse(localStorage.getItem("user")).email,
-          weight: weight,
-          height: height,
-          genposition: genposition,
-          natposition: selectedPositions,
-          yearsexp: yearsexp,
-          description: description,
-          foot: foot,
-          age: age,
-          phone: phone,
-          photo: profileImageUrl,
-        })
+        .put(`${import.meta.env.VITE_API_URL}/api/user/update-user`, requestData)
         .then((response) => {
+          console.log("Respuesta de la API:", response.data); // 🔍 Verificar respuesta
+
           if (response.status === 200) {
             Toastify({
               text: "¡Perfil completado!",
               duration: 3000,
               close: true,
-              gravity: "top", // "top" o "bottom"
-              position: "center", // "left", "center" o "right"
+              gravity: "top",
+              position: "center",
               backgroundColor: "#84cc16",
             }).showToast();
             navigate("/player-dashboard");
@@ -199,20 +259,20 @@ const PlayerForm = () => {
               text: "Error",
               duration: 3000,
               close: true,
-              gravity: "top", // "top" o "bottom"
-              position: "center", // "left", "center" o "right"
+              gravity: "top",
+              position: "center",
               backgroundColor: "#A52A2A",
             }).showToast();
           }
         })
         .catch((error) => {
-          console.error("Error al actualizar el usuario:", error);
+          console.error("Error al actualizar el usuario:", error.response?.data || error); // 🔍 Ver error detallado
           Toastify({
             text: "Error al actualizar el usuario",
             duration: 3000,
             close: true,
-            gravity: "top", // "top" o "bottom"
-            position: "center", // "left", "center" o "right"
+            gravity: "top",
+            position: "center",
             backgroundColor: "#A52A2A",
           }).showToast();
         });
@@ -221,8 +281,8 @@ const PlayerForm = () => {
         text: "Error al subir la imagen. Por favor, inténtalo de nuevo.",
         duration: 3000,
         close: true,
-        gravity: "top", // "top" o "bottom"
-        position: "center", // "left", "center" o "right"
+        gravity: "top",
+        position: "center",
         backgroundColor: "#A52A2A",
       }).showToast();
     }
@@ -362,20 +422,265 @@ const PlayerForm = () => {
                   </div>
                 </div>
 
-                {/* Years of Experience */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Años de experiencia
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="Años"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
-                    required
-                    min="0"
-                    max="20"
-                    onChange={(e) => setYearsExp(e.target.value)}
-                  />
+                {/* Right Column - Specific Positions and New Fields */}
+                <div className="space-y-6">
+                  {/* Sección de Trayectoria */}
+                  <div className="mb-8">
+                    <div className="flex justify-between items-center mb-4">
+                      <label className="text-lg font-medium text-gray-700 flex items-center">
+                        <CalendarDays className="w-5 h-5 mr-2 text-lime-500" />
+                        Trayectoria Deportiva
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowCareerForm(true)}
+                        className="flex items-center px-4 py-2 bg-lime-500 text-white rounded-lg hover:bg-lime-600 transition-colors"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Agregar Etapa
+                      </button>
+                    </div>
+
+                    {/* Timeline de Trayectoria */}
+                    <div className="space-y-4 mb-4">
+                      {careerSteps.map((step, index) => (
+                        <div key={index} className="relative pl-8 pb-4 border-l-2 border-lime-500">
+                          <div className="absolute left-0 top-0 w-4 h-4 bg-lime-500 rounded-full -translate-x-1/2"></div>
+                          <div className="bg-gray-50 rounded-lg p-4 ml-4 hover:shadow-md transition-shadow">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <h3 className="font-semibold text-gray-800">{step.club}</h3>
+                                <p className="text-sm text-gray-600">
+                                  {step.startYear} - {step.endYear || 'Presente'}
+                                </p>
+                                {step.description && (
+                                  <p className="text-sm text-gray-700 mt-2">{step.description}</p>
+                                )}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setCareerSteps(careerSteps.filter((_, i) => i !== index));
+                                }}
+                                className="text-gray-400 hover:text-red-500 transition-colors"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Formulario para agregar etapa */}
+                    {showCareerForm && (
+                      <div className="bg-gray-50 rounded-lg p-6 mb-4">
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Año Inicio
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                              value={tempCareerStep.startYear}
+                              onChange={(e) => setTempCareerStep({ ...tempCareerStep, startYear: e.target.value })}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Año Fin
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                              value={tempCareerStep.endYear}
+                              placeholder="Actual"
+                              onChange={(e) => setTempCareerStep({ ...tempCareerStep, endYear: e.target.value })}
+                            />
+                          </div>
+                        </div>
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Club/Equipo
+                          </label>
+                          <input
+                            type="text"
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                            value={tempCareerStep.club}
+                            onChange={(e) => setTempCareerStep({ ...tempCareerStep, club: e.target.value })}
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Descripción
+                          </label>
+                          <textarea
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                            value={tempCareerStep.description}
+                            onChange={(e) => setTempCareerStep({ ...tempCareerStep, description: e.target.value })}
+                          />
+                        </div>
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => setShowCareerForm(false)}
+                            className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                          >
+                            Cancelar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleAddCareerStep}
+                            className="px-4 py-2 bg-lime-500 text-white rounded-lg hover:bg-lime-600 transition-colors"
+                          >
+                            Agregar
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Sección de Logros */}
+                  <div className="mb-8">
+                    <div className="flex justify-between items-center mb-4">
+                      <label className="text-lg font-medium text-gray-700 flex items-center">
+                        <Trophy className="w-5 h-5 mr-2 text-lime-500" />
+                        Logros Deportivos
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowAchievementForm(true)}
+                        className="flex items-center px-4 py-2 bg-lime-500 text-white rounded-lg hover:bg-lime-600 transition-colors"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Agregar Logro
+                      </button>
+                    </div>
+
+                    {/* Grid de Logros */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      {achievements.map((achievement, index) => (
+                        <div key={index} className="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-start space-x-3">
+                              <div className="mt-1">
+                                <AchievementIcon type={achievement.type} />
+                              </div>
+                              <div>
+                                <h3 className="font-semibold text-gray-800">{achievement.title}</h3>
+                                <p className="text-sm text-gray-600">{achievement.year}</p>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setAchievements(achievements.filter((_, i) => i !== index));
+                              }}
+                              className="text-gray-400 hover:text-red-500 transition-colors"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Formulario para agregar logro */}
+                    {showAchievementForm && (
+                      <div className="bg-gray-50 rounded-lg p-6 mb-4">
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Año
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                              value={tempAchievement.year}
+                              onChange={(e) => setTempAchievement({ ...tempAchievement, year: e.target.value })}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Tipo
+                            </label>
+                            <select
+                              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                              value={tempAchievement.type}
+                              onChange={(e) => setTempAchievement({ ...tempAchievement, type: e.target.value })}
+                            >
+                              <option value="trophy">Trofeo</option>
+                              <option value="medal">Medalla</option>
+                              <option value="star">Estrella</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Título del Logro
+                          </label>
+                          <input
+                            type="text"
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                            value={tempAchievement.title}
+                            onChange={(e) => setTempAchievement({ ...tempAchievement, title: e.target.value })}
+                          />
+                        </div>
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => setShowAchievementForm(false)}
+                            className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                          >
+                            Cancelar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleAddAchievement}
+                            className="px-4 py-2 bg-lime-500 text-white rounded-lg hover:bg-lime-600 transition-colors"
+                          >
+                            Agregar
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Injury History - New Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                      Lesiones
+                    </label>
+                    <select
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200"
+                      onChange={(e) => setInjuryHistory(+e.target.value)} // Convierte a número
+                    >
+                      <option value="">Selecciona una opción</option>
+                      <option value="1">Sí</option>
+                      <option value="0">No</option>
+                    </select>
+                  </div>
+
+
+
+                  {/* Training Hours - New Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Horas de Entrenamiento Semanales
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-lime-500 focus:border-transparent transition duration-200 appearance-none"
+                        placeholder="Ingresa las horas semanales"
+                        min="0"
+                        max="20"
+                        onChange={(e) => setTrainingHoursPerWeek(e.target.value)}
+                      />
+                    </div>
+
+                  </div>
                 </div>
 
                 {/* Foot */}
