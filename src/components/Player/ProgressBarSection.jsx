@@ -1,23 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Award, Calculator } from 'lucide-react';
 import axios from 'axios';
 
 const ProgressBarSection = ({ playerInfo }) => {
   const [progressValue, setProgressValue] = useState(0);
-  const [isOnCooldown, setIsOnCooldown] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-
-  useEffect(() => {
-    let timer;
-    if (isOnCooldown && countdown > 0) {
-      timer = setInterval(() => {
-        setCountdown(prev => prev - 1);
-      }, 1000);
-    } else if (countdown === 0) {
-      setIsOnCooldown(false);
-    }
-    return () => clearInterval(timer);
-  }, [isOnCooldown, countdown]);
 
   const calculatePercentage = async () => {
     const positionMap = {
@@ -61,11 +47,6 @@ const ProgressBarSection = ({ playerInfo }) => {
       console.error("Error evaluating algorithm:", error);
       setProgressValue(0);
     }
-
-
-    // Start cooldown
-    setIsOnCooldown(true);
-    setCountdown(60);
   };
 
   return (
@@ -77,17 +58,10 @@ const ProgressBarSection = ({ playerInfo }) => {
       <div className="flex items-center gap-2 mb-3">
         <button 
           onClick={calculatePercentage}
-          disabled={isOnCooldown}
-          className={`flex items-center gap-2 ${
-            isOnCooldown 
-              ? 'bg-gray-400 cursor-not-allowed' 
-              : 'bg-lime-500 hover:bg-lime-600'
-          } text-white text-sm px-4 py-2 rounded-full shadow-md transition-all duration-300 hover:shadow-lg`}
+          className="flex items-center gap-2 bg-lime-500 hover:bg-lime-600 text-white text-sm px-4 py-2 rounded-full shadow-md transition-all duration-300 hover:shadow-lg"
         >
           <Calculator className="h-4 w-4" />
-          {isOnCooldown 
-            ? `Espera ${countdown} segundos` 
-            : 'Calcular Porcentaje'}
+          Calcular Porcentaje
         </button>
       </div>
       <div className="bg-gray-100 rounded-full h-6 overflow-hidden">
