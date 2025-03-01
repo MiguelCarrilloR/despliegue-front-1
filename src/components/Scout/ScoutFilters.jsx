@@ -322,8 +322,9 @@ const ScoutFilters = () => {
                           className="w-full h-48 object-cover rounded-lg"
                         />
                         <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm">
-                          {(player.score).toFixed(1)}%
+                          {player.score !== undefined ? `${player.score.toFixed(1)}%` : 'N/A'}
                         </div>
+
                       </div>
 
                       <h3 className="text-lg font-bold mb-2">{player.name}</h3>
