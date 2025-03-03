@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import TypingEffect from "react-typing-effect"; // Importar el componente
+import background from "../../assets/background.png";
 
 /**
  * Componente Hero que representa la sección principal de la página.
@@ -16,7 +17,7 @@ import TypingEffect from "react-typing-effect"; // Importar el componente
 const Hero = () => {
   return (
     <div className="relative text-white h-screen">
-      <img src="https://i.imgur.com/kAAoWpn.png" className="absolute w-full h-full object-cover" loading="lazy"/>
+      <img src={background} className="absolute w-full h-full object-cover" loading="lazy"/>
       <div className="relative z-10 max-w-[1500px] mt-[-96px] w-full h-screen mx-auto text-center flex flex-col justify-center">
         <h1 className="md:text-7xl sm:text-6xl text-4xl font-bold md:py-6">
           Promesas a la Cancha
