@@ -45,6 +45,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import ProgressBarSection from "./ProgressBarSection";
+import UpdateProfileModal from "./UpdateProfileModal";
 
 function PlayerProfile() {
   const [playerInfo, setPlayerInfo] = useState(null);
@@ -76,8 +77,8 @@ function PlayerProfile() {
     const newPercentage = Math.floor(Math.random() * 100);
     setProgressValue(newPercentage);
   };
- 
- 
+
+
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -95,6 +96,8 @@ function PlayerProfile() {
           `${import.meta.env.VITE_API_URL}/api/user/playerId/${userId}`
         );
         const playerInfo = response.data;
+        console.log("Player Info:", playerInfo);
+
         setPlayerInfo(playerInfo);
         setPositions(playerInfo.natposition || []);
         setProgressValue(Math.round(playerInfo.score) || 0);
@@ -339,9 +342,8 @@ function PlayerProfile() {
     };
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (updatedData) => {
     try {
-      const updatedData = { ...updatedInfo, natposition: positions };
       await axios.put(
         `${import.meta.env.VITE_API_URL}/api/user/update-user/`,
         updatedData
@@ -352,6 +354,7 @@ function PlayerProfile() {
       console.error("Error updating player info:", error);
     }
   };
+
 
   const positionOptions = [
     "PO",
@@ -441,69 +444,69 @@ function PlayerProfile() {
                   </div>
                 </div>
 
-{/* Training & Health Card */}
-<div className="bg-white rounded-2xl shadow-xl p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Activity className="h-5 w-5 text-lime-600" />
-              Entrenamiento y Salud
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="text-sm text-gray-500">Horas de Entrenamiento Semanal</p>
-                <p className="text-lg font-semibold">{playerInfo?.trainingHoursPerWeek} horas</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="text-sm text-gray-500">Historial de Lesiones</p>
-                <p className="text-lg font-semibold">{playerInfo?.injuryHistory || 0}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Experience Timeline */}
-          <div className="bg-white rounded-2xl shadow-xl p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-lime-600" />
-              Experiencia
-            </h3>
-            <div className="space-y-4">
-              {playerInfo?.yearsexp?.map((exp, index) => (
-                <div key={index} className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-semibold text-gray-800">{exp.club}</p>
-                      <p className="text-sm text-gray-600">
-                        {exp.startYear} - {exp.endYear || 'Presente'}
-                      </p>
+                {/* Training & Health Card */}
+                <div className="bg-white rounded-2xl shadow-xl p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-lime-600" />
+                    Entrenamiento y Salud
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-xl">
+                      <p className="text-sm text-gray-500">Horas de Entrenamiento Semanal</p>
+                      <p className="text-lg font-semibold">{playerInfo?.trainingHoursPerWeek} horas</p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-xl">
+                      <p className="text-sm text-gray-500">Historial de Lesiones</p>
+                      <p className="text-lg font-semibold">{playerInfo?.injuryHistory || 0}</p>
                     </div>
                   </div>
-                  {exp.description && (
-                    <p className="text-gray-600 mt-2 text-sm">{exp.description}</p>
-                  )}
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Achievements Section */}
-          <div className="bg-white rounded-2xl shadow-xl p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Trophy className="h-5 w-5 text-lime-600" />
-              Logros
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {playerInfo?.achievements?.map((achievement, index) => (
-                <div key={index} className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2">
-                    {achievement.type === 'trophy' && <Trophy className="h-4 w-4 text-yellow-500" />}
-                    {achievement.type === 'medal' && <Award className="h-4 w-4 text-blue-500" />}
-                    {achievement.type === 'star' && <Activity className="h-4 w-4 text-purple-500" />}
-                    <p className="font-semibold">{achievement.title}</p>
+                {/* Experience Timeline */}
+                <div className="bg-white rounded-2xl shadow-xl p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-lime-600" />
+                    Experiencia
+                  </h3>
+                  <div className="space-y-4">
+                    {playerInfo?.yearsexp?.map((exp, index) => (
+                      <div key={index} className="bg-gray-50 p-4 rounded-xl">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-semibold text-gray-800">{exp.club}</p>
+                            <p className="text-sm text-gray-600">
+                              {exp.startYear} - {exp.endYear || 'Presente'}
+                            </p>
+                          </div>
+                        </div>
+                        {exp.description && (
+                          <p className="text-gray-600 mt-2 text-sm">{exp.description}</p>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{achievement.year}</p>
                 </div>
-              ))}
-            </div>
-          </div>
+
+                {/* Achievements Section */}
+                <div className="bg-white rounded-2xl shadow-xl p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-lime-600" />
+                    Logros
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {playerInfo?.achievements?.map((achievement, index) => (
+                      <div key={index} className="bg-gray-50 p-4 rounded-xl">
+                        <div className="flex items-center gap-2">
+                          {achievement.type === 'trophy' && <Trophy className="h-4 w-4 text-yellow-500" />}
+                          {achievement.type === 'medal' && <Award className="h-4 w-4 text-blue-500" />}
+                          {achievement.type === 'star' && <Activity className="h-4 w-4 text-purple-500" />}
+                          <p className="font-semibold">{achievement.title}</p>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-1">{achievement.year}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 {/* Positions */}
                 <div>
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -649,119 +652,13 @@ function PlayerProfile() {
 
       )}
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Actualiza tu Información</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="name"
-            label="Nombre"
-            type="text"
-            fullWidth
-            value={updatedInfo.name || ""}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="age"
-            label="Edad"
-            type="number"
-            fullWidth
-            value={updatedInfo.age || ""}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="weight"
-            label="Peso"
-            type="number"
-            fullWidth
-            value={updatedInfo.weight || ""}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="height"
-            label="Altura"
-            type="number"
-            fullWidth
-            value={updatedInfo.height || ""}
-            onChange={handleChange}
-          />
-          <FormControl fullWidth margin="dense">
-            <InputLabel id="foot-label">Pie Hábil</InputLabel>
-            <Select
-              labelId="foot-label"
-              name="foot"
-              value={updatedInfo.foot || ""}
-              onChange={handleChange}
-              label="Pie Hábil"
-            >
-              <MenuItem value="right">Derecha</MenuItem>
-              <MenuItem value="left">Izquierda</MenuItem>
-              <MenuItem value="both">Ambidiestro</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth margin="dense">
-            <InputLabel id="genposition-label">Posición Géneral</InputLabel>
-            <Select
-              labelId="genposition-label"
-              name="genposition"
-              value={updatedInfo.genposition || ""}
-              onChange={handleChange}
-              label="Posición Géneral"
-            >
-              <MenuItem value="goalkeeper">Portera</MenuItem>
-              <MenuItem value="defender">Defensa</MenuItem>
-              <MenuItem value="midfielder">Mediocampista</MenuItem>
-              <MenuItem value="attacker">Atacante</MenuItem>
-            </Select>
-          </FormControl>
-          <label className="text-black my-8">Posiciones Específicas</label>
-          <FormGroup>
-            {positionOptions.map((position) => (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={positions.includes(position)}
-                    onChange={handleCheckboxChange}
-                    value={position}
-                  />
-                }
-                label={translatePositionEs(position)}
-                key={position}
-              />
-            ))}
-          </FormGroup>
-          <TextField
-            margin="dense"
-            name="description"
-            label="Descripción"
-            type="text"
-            fullWidth
-            value={updatedInfo.description || ""}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="yearsexp"
-            label="Años de experiencia"
-            type="number"
-            fullWidth
-            value={updatedInfo.yearsexp || ""}
-            onChange={handleChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancelar
-          </Button>
-          <Button onClick={handleSubmit} color="primary">
-            Actualizar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <UpdateProfileModal
+        open={open}
+        handleClose={handleClose}
+        playerInfo={playerInfo}
+        onSubmit={handleSubmit}
+      />
+
 
 
     </div>
