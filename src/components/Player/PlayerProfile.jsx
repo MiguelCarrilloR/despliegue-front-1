@@ -11,34 +11,9 @@ import {
   Footprints,
   Award,
   Activity,
-  Medal,
-  Star,
   Calendar,
   FileText,
 } from 'lucide-react';
-import {
-  LinearProgress,
-  Box,
-  Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Button,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Card,
-  CardContent,
-  CardMedia,
-} from "@mui/material";
-import { IoChatbubbleEllipses } from "react-icons/io5";
-import { FaInfoCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { storage } from "../../firebase/FirebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
