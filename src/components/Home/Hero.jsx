@@ -1,44 +1,46 @@
 import { ArrowRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
-import TypingEffect from "react-typing-effect"; // Importar el componente
-import background from "../../assets/background.png";
+import TypingEffect from "react-typing-effect";
 
-/**
- * Componente Hero que representa la sección principal de la página.
- * Muestra un video de fondo con un título, una descripción y un botón de inicio de sesión.
- *
- * @component
- * @example
- * return (
- *   <Hero />
- * )
- */
+const backgroundUrl = "https://i.imgur.com/kAAoWpn.png";
+
 const Hero = () => {
   return (
-    <div className="relative text-white h-screen">
-      <img src={background} className="absolute w-full h-full object-cover" loading="lazy"/>
-      <div className="relative z-10 max-w-[1500px] mt-[-96px] w-full h-screen mx-auto text-center flex flex-col justify-center">
-        <h1 className="md:text-7xl sm:text-6xl text-4xl font-bold md:py-6">
+    <section className="relative text-white h-screen">
+      {/* Imagen de fondo optimizada */}
+      <div
+        className="absolute inset-0 bg-gray-900 bg-cover bg-center transition-opacity duration-500"
+        style={{ backgroundImage: `url(${backgroundUrl})`, opacity: 1 }}
+        role="img"
+        aria-label="Imagen de fondo con jugadoras de fútbol"
+      ></div>
+
+      {/* Contenido principal */}
+      <div className="relative z-10 flex flex-col justify-center h-screen max-w-[1500px] mx-auto text-center px-6">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold md:py-6">
           Promesas a la Cancha
         </h1>
+
         <div className="flex justify-center items-center">
-          <p className="md:text-5xl sm:text-4xl text-xl font-bold py-4">
+          <p className="text-xl sm:text-4xl md:text-5xl font-bold py-4">
             Desata tu
           </p>
           <TypingEffect
-            className="md:text-5xl sm:text-4xl text-xl font-bold md:pl-4 pl-2"
-            text={["talento", "espiritú", "potencial"]} // Pasas el texto que quieres que se teclee
-            speed={100} // Velocidad de tipeo
-            eraseSpeed={60} // Velocidad de borrado
-            eraseDelay={1000} // Tiempo de espera antes de borrar
-            typingDelay={500} // Tiempo de espera antes de empezar a teclear
-            loop // Esto hace que el efecto se repita
+            className="text-xl sm:text-4xl md:text-5xl font-bold md:pl-4 pl-2"
+            text={["talento", "espíritu", "potencial"]}
+            speed={100}
+            eraseSpeed={60}
+            eraseDelay={1000}
+            typingDelay={500}
+            loop
           />
         </div>
-        <p className="md:text-2xl text-xl font-bold text-white">
+
+        <p className="text-xl md:text-2xl font-bold">
           Empieza tu carrera deportiva ahora
         </p>
+
         <Link to="/login">
           <button className="group bg-green-600 text-white px-8 py-4 rounded-lg my-6 mx-auto font-semibold shadow-lg hover:bg-green-500 transition-all duration-300 flex items-center gap-2">
             Comienza ahora
@@ -46,8 +48,10 @@ const Hero = () => {
           </button>
         </Link>
       </div>
-      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
-    </div>
+
+      {/* Capa oscura para mejorar la legibilidad del texto */}
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+    </section>
   );
 };
 
