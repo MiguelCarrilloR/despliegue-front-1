@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { IoChatbubbleEllipses } from "react-icons/io5";
-import { MessageCircle, Search, Filter, ChevronRight } from 'lucide-react';
+import { MessageCircle, Search, Filter, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 const ScoutFilters = () => {
   const [players, setPlayers] = useState([]);
@@ -12,6 +11,68 @@ const ScoutFilters = () => {
   const [position, setPosition] = useState(""); // Estado para la posición seleccionada
   const [foot, setFoot] = useState(""); // Estado para el pie hábil
   const user = JSON.parse(localStorage.getItem("user"));
+  const [currentPage, setCurrentPage] = useState(1);
+  const [playersPerPage, setPlayersPerPage] = useState(9); // 3x3 grid por defecto
+  
+  // Calcular jugadoras a mostrar en la página actual
+  const indexOfLastPlayer = currentPage * playersPerPage;
+  const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
+  const currentPlayers = players.slice(indexOfFirstPlayer, indexOfLastPlayer);
+  
+  // Calcular número total de páginas
+  const totalPages = Math.ceil(players.length / playersPerPage);
+  
+  // Función para cambiar de página
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    // Opcional: hacer scroll al inicio del grid
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  // Ir a la página anterior
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      paginate(currentPage - 1);
+    }
+  };
+  
+  // Ir a la página siguiente
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      paginate(currentPage + 1);
+    }
+  };
+  
+  // Ir a la primera página
+  const goToFirstPage = () => {
+    paginate(1);
+  };
+  
+  // Ir a la última página
+  const goToLastPage = () => {
+    paginate(totalPages);
+  };
+  
+  // Generar array de números de página para mostrar
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5; // Mostrar máximo 5 números de página
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+    
+    // Ajustar si estamos cerca del final
+    if (endPage - startPage + 1 < maxPagesToShow && startPage > 1) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+    
+    return pageNumbers;
+  };
+
 
   const navigate = useNavigate();
 
@@ -240,7 +301,7 @@ const ScoutFilters = () => {
                   </div>
                   <input
                     type="range"
-                    min="18"
+                    min="16"
                     max="30"
                     value={maxAge}
                     onChange={handleAgeChange}
@@ -311,9 +372,10 @@ const ScoutFilters = () => {
 
             {/* Players Grid */}
             <div className="lg:w-3/4">
+              {/* Grid de jugadoras */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {players.length > 0 ? (
-                  players.map((player) => (
+                {currentPlayers.length > 0 ? (
+                  currentPlayers.map((player) => (
                     <div key={player._id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-4">
                       <div className="relative mb-4">
                         <img
@@ -324,7 +386,6 @@ const ScoutFilters = () => {
                         <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm">
                           {player.score !== undefined ? `${player.score.toFixed(1)}%` : 'N/A'}
                         </div>
-
                       </div>
 
                       <h3 className="text-lg font-bold mb-2">{player.name}</h3>
@@ -352,6 +413,94 @@ const ScoutFilters = () => {
                   </div>
                 )}
               </div>
+
+              {/* Paginación */}
+              {players.length > 0 && (
+                <div className="mt-8 flex justify-center">
+                  <nav className="flex items-center space-x-1">
+                    {/* Botón primera página */}
+                    <button
+                      onClick={goToFirstPage}
+                      disabled={currentPage === 1}
+                      className={`p-2 rounded-md ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}
+                      aria-label="Primera página"
+                    >
+                      <ChevronsLeft className="h-5 w-5" />
+                    </button>
+
+                    {/* Botón página anterior */}
+                    <button
+                      onClick={goToPreviousPage}
+                      disabled={currentPage === 1}
+                      className={`p-2 rounded-md ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}
+                      aria-label="Página anterior"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+
+                    {/* Números de página */}
+                    {getPageNumbers().map((pageNumber) => (
+                      <button
+                        key={pageNumber}
+                        onClick={() => paginate(pageNumber)}
+                        className={`px-3 py-2 rounded-md ${pageNumber === currentPage
+                            ? 'bg-lime-500 text-white font-medium'
+                            : 'text-gray-700 hover:bg-gray-100'
+                          }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    ))}
+
+                    {/* Botón página siguiente */}
+                    <button
+                      onClick={goToNextPage}
+                      disabled={currentPage === totalPages || totalPages === 0}
+                      className={`p-2 rounded-md ${currentPage === totalPages || totalPages === 0 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}
+                      aria-label="Página siguiente"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+
+                    {/* Botón última página */}
+                    <button
+                      onClick={goToLastPage}
+                      disabled={currentPage === totalPages || totalPages === 0}
+                      className={`p-2 rounded-md ${currentPage === totalPages || totalPages === 0 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}
+                      aria-label="Última página"
+                    >
+                      <ChevronsRight className="h-5 w-5" />
+                    </button>
+                  </nav>
+                </div>
+              )}
+
+              {/* Información sobre paginación */}
+              {players.length > 0 && (
+                <div className="mt-2 text-center text-sm text-gray-500">
+                  Mostrando {indexOfFirstPlayer + 1}-{Math.min(indexOfLastPlayer, players.length)} de {players.length} jugadoras
+                </div>
+              )}
+
+              {/* Selector de jugadoras por página */}
+              {players.length > playersPerPage && (
+                <div className="mt-4 flex justify-center items-center text-sm">
+                  <span className="mr-2">Jugadoras por página:</span>
+                  <select
+                    value={playersPerPage}
+                    onChange={(e) => {
+                      setPlayersPerPage(Number(e.target.value));
+                      setCurrentPage(1); // Volver a la primera página al cambiar
+                    }}
+                    className="border rounded py-1 px-2"
+                  >
+                    <option value={6}>6</option>
+                    <option value={9}>9</option>
+                    <option value={12}>12</option>
+                    <option value={15}>15</option>
+                  </select>
+                </div>
+              )}
             </div>
           </div>
         </div>

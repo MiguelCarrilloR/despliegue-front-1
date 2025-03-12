@@ -246,7 +246,7 @@ const PlayerInfo = () => {
                       <div>
                         <p className="text-sm text-gray-600">Puntaje de Aceptación</p>
                         <p className="text-2xl font-bold text-gray-900">
-                          {(player.score * 100).toFixed(1)}%
+                          {(player.score).toFixed(1)}%
                         </p>
                       </div>
                     </div>
