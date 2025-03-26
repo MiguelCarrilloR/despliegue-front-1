@@ -23,6 +23,7 @@ function Chat() {
   const [userRole, setUserRole] = useState("");
   const [showSidebar, setShowSidebar] = React.useState(false);
 
+  
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
