@@ -29,7 +29,7 @@ const AboutUs = () => {
 
           {/* Descripción */}
           <p className="text-gray-600 leading-relaxed max-w-[800px]">
-            Somos un equipo de estudiantes de octavo semestre de Ingeniería de
+            Somos un equipo de estudiantes de noveno semestre de Ingeniería de
             Sistemas, unidos por una pasión compartida por la tecnología y el
             fútbol. Creemos firmemente en el poder del deporte para transformar
             vidas y en el potencial de la tecnología para crear oportunidades
