@@ -4,6 +4,7 @@ import axios from "axios";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/Navbar";
 
+
 /**
  * Componente que verifica la dirección de correo electrónico del usuario.
  * Extrae el token de la URL y realiza una solicitud a la API para verificar el correo.
